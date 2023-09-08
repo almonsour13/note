@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="path/to/masonry.css"> <!-- Include Masonry CSS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/masonry/4.2.2/masonry.pkgd.min.js"></script> <!-- Include Masonry library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/4.1.4/imagesloaded.pkgd.min.js"></script> <!-- Include imagesLoaded library -->
+    <style>
+        *{
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+        body{
+            height: 100vh;
+            background-color: blue;
+        }
+        .grid {
+    width: 100vw;
+    height: 100vh;
+    background-color: red;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 10px; /* Adjust the gap between cards as needed */
+    position: relative; /* This is needed to center the cards */
+}
+
+.grid-item {
+    /* Your card styles here */
+    width: 250px; /* Use .grid-sizer class to define the width of the columns */
+   /* Adjust the margin as needed */
+    display: flex; margin: 10px; 
+    flex-direction: column; /* Allows for vertical centering */
+    justify-content: center; /* Center content vertically */
+    align-items: center; /* Center content horizontally */
+    border: 1px solid #ccc; /* Optional: Add a border for better visualization */
+}
+
+    </style>
+</head>
+<body>
+    <div class="grid is-centered">
+        <div class="grid-item" style="height: 150px;">Card 1</div>
+        <div class="grid-item" style="height: 200px;">Card 2</div>
+        <div class="grid-item" style="height: 180px;">Card 3</div>
+        <div class="grid-item" style="height: 150px;">Card 1</div>
+        <div class="grid-item" style="height: 200px;">Card 2</div>
+        <div class="grid-item" style="height: 180px;">Card 3</div>
+        <div class="grid-item" style="height: 150px;">Card 1</div>
+        <div class="grid-item" style="height: 200px;">Card 2</div>
+        <div class="grid-item" style="height: 180px;">Card 3</div>
+        <!-- Add more grid items with varying heights as needed -->
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/masonry/4.2.2/masonry.pkgd.min.js"></script>
+    <script>
+        function initializeMasonry() {
+            var container = document.querySelector('.grid');
+            var msnry = new Masonry(container, {
+                itemSelector: '.grid-item',
+                columnWidth: '.grid-item',
+                percentPosition: true,
+                fitWidth :true
+            });
+        }
+    
+        document.addEventListener("DOMContentLoaded", initializeMasonry);
+    
+        window.onload = initializeMasonry;
+        window.addEventListener('hashchange', initializeMasonry);
+    </script>
+</body>
+</html>

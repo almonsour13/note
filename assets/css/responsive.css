@@ -1,0 +1,58 @@
+@media only screen and (max-width: 700px){
+    aside{
+        position: fixed;
+        z-index: 999;
+        height: 100vh;
+        top: 0px;
+        transition: 0.5s;
+    }
+    aside .menu-list-container{
+        position: relative;
+        width: 255px;
+        margin-left: -315px;
+    }
+    aside.active .menu-list-container .close-menu-btn{
+        position: absolute;
+        top: 5px;
+        right: -50px;
+        height: 40px;
+        width: 40px;
+        background-color: transparent;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 1.2rem;
+        color: white;
+        border: 2px white solid;
+        cursor: pointer;
+    }
+    aside .menu-list-container .logo-container-respo{
+        display: flex;
+        align-items: center;
+        padding-left: 60px;
+        justify-content: left;
+        font-size: 23px;
+        height: 60px;
+    }
+    aside .menu-list-container a{
+        width: 100%;
+    }
+    aside.active .menu-list-container{
+        margin-left: 0px;
+    }
+    aside.active{
+        height: 100vh;
+        width: 100%;
+        background-color: rgba(0, 0, 0, 0.548);
+    }
+    .content-container{
+        margin-left: 0;
+    }
+    .content-container .note-card-container{
+        margin-right: 30px;
+    }
+    .note-card{
+        width: 100%;
+    }
+
+}
