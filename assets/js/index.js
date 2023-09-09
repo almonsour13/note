@@ -51,9 +51,9 @@ function handleRoute() {
 
     const pageMapping = {
         '/': notes(),
-        '/reminder': 'still decevoping', 
+        '/reminder': 'still developing', 
         '/archive': archiveNotes(), 
-        '/trash': 'still decevoping', 
+        '/trash': 'still developing', 
         
     };
 
