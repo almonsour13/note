@@ -1,0 +1,72 @@
+[
+    {
+      "id": 1,
+      "author": "Albert Einstein",
+      "content": "Imagination is more important than knowledge.",
+      "color": "",
+      "backgroundImage": "assets/images/background-image-5.png"
+    },
+    {
+      "id": 2,
+      "author": "Mahatma Gandhi",
+      "content": "Be the change that you wish to see in the world.",
+      "color": "#87CEEB",
+      "backgroundImage": "assets/images/background-image-1.png"
+    },
+    {
+      "id": 3,
+      "author": "Maya Angelou",
+      "content": "I've learned that people will forget what you said, people will forget what you did, but people will never forget how you made them feel.",
+      "color": "#98FB98",
+      "backgroundImage": "assets/images/background-image-4.png"
+    },
+    {
+      "id": 4,
+      "author": "Martin Luther King Jr.",
+      "content": "Darkness cannot drive out darkness; only light can do that. Hate cannot drive out hate; only love can do that.",
+      "color": "#FFB6C1",
+      "backgroundImage": "."
+    },
+    {
+      "id": 5,
+      "author": "Nelson Mandela",
+      "content": "Education is the most powerful weapon which you can use to change the world.",
+      "color": "#FFA07A",
+      "backgroundImage": "assets/images/background-image-2.png"
+    },
+    {
+      "id": 6,
+      "author": "Steve Jobs",
+      "content": "Your work is going to fill a large part of your life, and the only way to be truly satisfied is to do what you believe is great work.",
+      "color": "#F0E68C",
+      "backgroundImage": "assets/images/background-image-6.png"
+    },
+    {
+      "id": 7,
+      "author": "Winston Churchill",
+      "content": "Success is not final, failure is not fatal: It is the courage to continue that counts.",
+      "color": "#FFD700",
+      "backgroundImage": "assets/images/background-image-3.png"
+    },
+    {
+      "id": 8,
+      "author": "Marie Curie",
+      "content": "Nothing in life is to be feared, it is only to be understood. Now is the time to understand more, so that we may fear less.",
+      "color": "#87CEEB",
+      "backgroundImage": "assets/images/background-image-6.png"
+    },
+    {
+      "id": 7,
+      "author": "Mark Twain",
+      "content": "The two most important days in your life are the day you are born and the day you find out why.",
+      "color": "#98FB98",
+      "backgroundImage": "assets/images/background-image-2.png"
+    },
+    {
+      "id": 8,
+      "author": "Eleanor Roosevelt",
+      "content": "The future belongs to those who believe in the beauty of their dreams.",
+      "color": "white"
+    }
+  ]
+  

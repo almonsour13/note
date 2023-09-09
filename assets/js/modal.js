@@ -104,6 +104,7 @@ window.addEventListener("hashchange", setupEventListeners);
       alert()
   }
   function closeModal(event) {
+    event.preventDefault()
       const modalContainer = event.target.closest('.modal-container');
       if (modalContainer) {
           modalContainer.remove();

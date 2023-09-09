@@ -31,7 +31,7 @@
         <aside>
             <div class="menu-list-container">
                 <div class="close-menu-btn" onclick="closeMenuButton()">
-                    X
+                    x
                 </div>
                 <div class="logo-container-respo">
                     Note
@@ -41,12 +41,12 @@
                         <path d="M320-240h320v-80H320v80Zm0-160h320v-80H320v80ZM240-80q-33 0-56.5-23.5T160-160v-640q0-33 23.5-56.5T240-880h320l240 240v480q0 33-23.5 56.5T720-80H240Zm280-520v-200H240v640h480v-440H520ZM240-800v200-200 640-640Z" fill="black"/>
                     </svg>
                     <span>Notes</span></a>
-                <a href="#/tasks" class="menu-list">
+                <!-- <a href="#/tasks" class="menu-list">
                     <svg class="menu-svg" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24">
                         <path d="M320-280q17 0 28.5-11.5T360-320q0-17-11.5-28.5T320-360q-17 0-28.5 11.5T280-320q0 17 11.5 28.5T320-280Zm0-160q17 0 28.5-11.5T360-480q0-17-11.5-28.5T320-520q-17 0-28.5 11.5T280-480q0 17 11.5 28.5T320-440Zm0-160q17 0 28.5-11.5T360-640q0-17-11.5-28.5T320-680q-17 0-28.5 11.5T280-640q0 17 11.5 28.5T320-600Zm120 320h240v-80H440v80Zm0-160h240v-80H440v80Zm0-160h240v-80H440v80ZM200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-560H200v560Zm0-560v560-560Z"/>
                     </svg>
                     <span>Task</span>
-                </a>
+                </a> -->
                 <a href="#/reminder" class="menu-list">
                     <svg class="menu-svg" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24">
                         <path d="M160-200v-80h80v-280q0-83 50-147.5T420-792v-28q0-25 17.5-42.5T480-880q25 0 42.5 17.5T540-820v28q80 20 130 84.5T720-560v280h80v80H160Zm320-300Zm0 420q-33 0-56.5-23.5T400-160h160q0 33-23.5 56.5T480-80ZM320-280h320v-280q0-66-47-113t-113-47q-66 0-113 47t-47 113v280Z" fill="black"/>
@@ -73,24 +73,24 @@
 
         </div>
     </main>
+    <script src="assets/js/index.js"></script>
+    <script src="assets/js/modal.js"></script>
+    <script src="assets/js/masonry/masonry.pkgd.min.js"></script>
     <script>
-    function initializeMasonry() {
-        var container = document.querySelector('.note-card-container');
-        var msnry = new Masonry(container, {
-            itemSelector: '.note-card',
-            columnWidth: '.note-card',
-            fitWidth: true
-        });
-    }
-    window.addEventListener('DOMContentLoaded', initializeMasonry);
-    window.addEventListener('load', initializeMasonry);
-    window.addEventListener('resize', initializeMasonry);
-    window.addEventListener('hashchange', initializeMasonry);
-    initializeMasonry()
-</script>
-<script src="assets/js/index.js"></script>
-<script src="assets/js/modal.js"></script>
-<script src="assets/js/masonry/masonry.pkgd.min.js"></script>
+        function initializeMasonry() {
+            var container = document.querySelector('.note-card-container');
+            var msnry = new Masonry(container, {
+                itemSelector: '.note-card',
+                columnWidth: '.note-card',
+                fitWidth: true
+            });
+        }
+        window.addEventListener('DOMContentLoaded', initializeMasonry);
+        window.addEventListener('load', initializeMasonry);
+        window.addEventListener('resize', initializeMasonry);
+        window.addEventListener('hashchange', initializeMasonry);
+        initializeMasonry()
+    </script>
 
     
 </body>

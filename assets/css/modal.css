@@ -19,7 +19,8 @@
     margin: 10px;
     height: auto;
     max-height: 400px;
-    background-color: white;
+    background: linear-gradient(25deg, rgba(218,175,203,1) 0%, rgba(188,171,232,1) 50%, rgba(188,171,232,1) 50%, rgba(228,205,223,1) 100%);
+    
     border-radius: 10px;
 }
 .modal-main{
