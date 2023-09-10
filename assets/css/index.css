@@ -86,7 +86,7 @@ aside{
     height: 100%;
 }
 aside .menu-list-container{
-    width: 50px;
+    width: 45px;
     height: 100%;
     padding: 5px;
     transition: 0.2s;
@@ -143,6 +143,14 @@ aside.active .menu-list-container a{
     width: 100%;
     overflow: hidden;
     background-color: transparent;
-    display: flex;
-    justify-content: center;
+}
+.content-container .label:nth-child(1){
+    margin-top: 15px;
+}
+.content-container .label{
+    margin-left: 15px;
+}
+.pin-notes, .unpin-notes{
+    width: 100%;
+    width: 100%;
 }

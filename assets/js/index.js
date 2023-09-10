@@ -68,7 +68,6 @@ function handleRoute() {
 window.addEventListener('hashchange', handleRoute);
 handleRoute();
 
-
 function clickCard(element) {
 
   const matchingItem = content().find(item => element.getAttribute("noteID") == item.id);
@@ -80,7 +79,8 @@ function clickCard(element) {
       modalContainer.classList.add('modal-container');
 
       modalContainer.innerHTML = `
-          <div class="modal-content">
+          <div class="modal-content" 
+              style="${matchingItem.backgroundImage ? `background-image: url('${matchingItem.backgroundImage}');` : `background-color: ${matchingItem.color};`}">
               <!-- Modal Header with Title and Pin Button -->
               <div class="modal-main">
                   <div class="modal-header">
@@ -126,6 +126,97 @@ function clickCard(element) {
       body.appendChild(modalContainer);
   }
 }
+function notes() {
+  let pinnedNotes  = '';
+  let unpinNotes  = '';
+  content().forEach(item => {
+      if (!item.archive && !item.delete) {
+          if(item.pin){
+            pinnedNotes += `
+              <div class="note-card" 
+                   style="${item.backgroundImage ? `background-image: url('${item.backgroundImage}');` : `background-color: ${item.color};`}"
+                   onclick="clickCard(this)"
+                   noteID="${item.id}">
+                  ${item.author ? `<div class="note-title">${item.author}</div>` : ''}
+                  <div class="note-content">
+                      <p>${item.content ? item.content : "Empty Note"}</p>
+                  </div>
+              </div>
+            `
+          }else{
+            unpinNotes += `
+            <div class="note-card" 
+                 style="${item.backgroundImage ? `background-image: url('${item.backgroundImage}');` : `background-color: ${item.color};`}"
+                 onclick="clickCard(this)"
+                 noteID="${item.id}">
+                ${item.author ? `<div class="note-title">${item.author}</div>` : ''}
+                <div class="note-content">
+                    <p>${item.content ? item.content : "Empty Note"}</p>
+                </div>
+            </div>
+          `
+          }
+      }
+  });
+  
+  return `
+      ${pinnedNotes?`
+          <p class="label">Pinned</p>
+          <div class="pin-notes">
+            <div class="note-card-container" id="pinNotes">
+              ${pinnedNotes}
+            </div>
+          </div>`
+          :""
+      }
+      ${pinnedNotes && unpinNotes?`
+          <p class="label">Others</p>
+          <div class="unpin-notes">
+            <div class="note-card-container" id="pinNotes">
+              ${unpinNotes}
+            </div>
+          </div>`
+        :""
+     }
+      <div class="add-note-btn">
+        <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24">
+          <path d="M440-240h80v-120h120v-80H520v-120h-80v120H320v80h120v120ZM240-80q-33 0-56.5-23.5T160-160v-640q0-33 23.5-56.5T240-880h320l240 240v480q0 33-23.5 56.5T720-80H240Zm280-520v-200H240v640h480v-440H520ZM240-800v200-200 640-640Z"/>
+        </svg>
+      </div>
+    `;
+}
+function archiveNotes(){
+  let htmlContent = '';
+  content().forEach(item => {
+    if (item.archive) { // Check if the 'archive' property is not true
+        htmlContent += `
+            <div class="note-card" 
+                 style="${item.backgroundImage ? `background-image: url('${item.backgroundImage}');` : `background-color: ${item.color};`}"
+                 onclick="clickCard(this)"
+                 noteID="${item.id}"
+            >
+                ${item.author ? `<div class="note-title">${item.author}</div>` : ''}
+                <div class="note-content">
+                    <p>${item.content ? item.content : "Empty Note"}</p>
+                </div>
+            </div>
+        `;
+    }
+});
+
+return `
+    <div class="note-card-container">
+        ${htmlContent}
+    </div>
+    <div class="add-note-btn">
+      <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24">
+        <path d="M440-240h80v-120h120v-80H520v-120h-80v120H320v80h120v120ZM240-80q-33 0-56.5-23.5T160-160v-640q0-33 23.5-56.5T240-880h320l240 240v480q0 33-23.5 56.5T720-80H240Zm280-520v-200H240v640h480v-440H520ZM240-800v200-200 640-640Z"/>
+      </svg>
+    </div>
+`;
+
+}
+
 function content() {
   const content = [
     {
@@ -137,7 +228,7 @@ function content() {
       "archive": true,
       "delete": false,
       "reminder": "2023-09-15T08:00:00",
-      "pin": false
+      "pin": true
     },
     {
       "id": 2,
@@ -166,11 +257,11 @@ function content() {
       "author": "Martin Luther King Jr.",
       "content": "Darkness cannot drive out darkness; only light can do that. Hate cannot drive out hate; only love can do that.",
       "color": "#FFB6C1",
-      "backgroundImage": ".",
+      "backgroundImage": "",
       "archive": false,
       "delete": false,
       "reminder": "2023-09-30T15:45:00",
-      "pin": true
+      "pin": false
     },
     {
       "id": 5,
@@ -192,7 +283,7 @@ function content() {
       "archive": false,
       "delete": false,
       "reminder": "2023-10-10T09:15:00",
-      "pin": true
+      "pin": false
     },
     {
       "id": 7,
@@ -214,7 +305,7 @@ function content() {
       "archive": false,
       "delete": false,
       "reminder": "2023-10-20T11:00:00",
-      "pin": true
+      "pin": false
     },
     {
       "id": 9,
@@ -235,73 +326,10 @@ function content() {
       "archive": false,
       "delete": false,
       "reminder": "2023-11-01T16:20:00",
-      "pin": true
+      "pin": false
     }
   ];
   return content;
-}
-
-function notes() {
-  let htmlContent = '';
-  content().forEach(item => {
-      if (!item.archive && !item.delete) { // Check if both 'archive' and 'delete' properties are not true
-          htmlContent += `
-              <div class="note-card" 
-                   style="${item.backgroundImage ? `background-image: url('${item.backgroundImage}');` : `background-color: ${item.color};`}"
-                   onclick="clickCard(this)"
-                   noteID="${item.id}"
-              >
-                  ${item.author ? `<div class="note-title">${item.author}</div>` : ''}
-                  <div class="note-content">
-                      <p>${item.content ? item.content : "Empty Note"}</p>
-                  </div>
-              </div>
-          `;
-      }
-  });
-  
-  return `
-      <div class="note-card-container">
-          ${htmlContent}
-      </div>
-      <div class="add-note-btn">
-        <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24">
-          <path d="M440-240h80v-120h120v-80H520v-120h-80v120H320v80h120v120ZM240-80q-33 0-56.5-23.5T160-160v-640q0-33 23.5-56.5T240-880h320l240 240v480q0 33-23.5 56.5T720-80H240Zm280-520v-200H240v640h480v-440H520ZM240-800v200-200 640-640Z"/>
-        </svg>
-      </div>
-  `;
-  
-}
-function archiveNotes(){
-  let htmlContent = '';
-content().forEach(item => {
-    if (item.archive) { // Check if the 'archive' property is not true
-        htmlContent += `
-            <div class="note-card" 
-                 style="${item.backgroundImage ? `background-image: url('${item.backgroundImage}');` : `background-color: ${item.color};`}"
-                 onclick="clickCard(this)"
-                 noteID="${item.id}"
-            >
-                ${item.author ? `<div class="note-title">${item.author}</div>` : ''}
-                <div class="note-content">
-                    <p>${item.content ? item.content : "Empty Note"}</p>
-                </div>
-            </div>
-        `;
-    }
-});
-
-return `
-    <div class="note-card-container">
-        ${htmlContent}
-    </div>
-    <div class="add-note-btn">
-      <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24">
-        <path d="M440-240h80v-120h120v-80H520v-120h-80v120H320v80h120v120ZM240-80q-33 0-56.5-23.5T160-160v-640q0-33 23.5-56.5T240-880h320l240 240v480q0 33-23.5 56.5T720-80H240Zm280-520v-200H240v640h480v-440H520ZM240-800v200-200 640-640Z"/>
-      </svg>
-    </div>
-`;
-
 }
 
 

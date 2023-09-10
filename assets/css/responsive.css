@@ -53,7 +53,13 @@
         margin-left: 0;
     }
     .content-container .note-card-container{
-        margin-right: 30px;
+        margin-right: 40px;
+    }
+    .pin-notes, .unpin-notes{
+        width: 100%;
+        width: 100%;
+        display: flex;
+        justify-content: center;
     }
     .note-card{
         width: 100%;
