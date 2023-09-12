@@ -15,7 +15,7 @@
         position: absolute;
         /* top: 5px;
         right: -50px; */
-        right: -40px;
+        right: -55px;
         height: 35px;
         width: 35px;
         margin: 5px;
@@ -26,6 +26,7 @@
         font-size: 1.3rem;
         text-transform: uppercase;
         color: white;
+        border: 2px white solid;
         /* background: linear-gradient(25deg, rgb(240, 154, 210) 0%, rgba(188,171,232,1) 50%, rgba(188,171,232,1) 50%, rgb(238, 164, 222) 100%); */
         border-radius: 5px;
         cursor: pointer;
@@ -53,7 +54,19 @@
         margin-left: 0;
     }
     .content-container .note-card-container{
-        margin-right: 40px;
+        margin-right: 56px;
+    }
+    .modal-content{
+        margin-right: 30px;
+    }
+    body.mobile .note-card-container{
+        margin-right: 42px;
+    }
+    body.mobile .add-note-btn{
+        right: 18px;
+    }
+    body.mobile .modal-content{
+        margin-right: 16px;
     }
     .pin-notes, .unpin-notes{
         width: 100%;

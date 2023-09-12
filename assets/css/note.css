@@ -10,7 +10,7 @@
     height:auto;
     background-color:white;
     /* box-shadow: 0px 0px 2px 0.5px rgb(124, 124, 124); */
-    border-radius: 5px;
+    border-radius: 10px;
     display: flex;
     flex-direction: column;
     justify-content: left;
@@ -48,20 +48,27 @@
     word-wrap: break-word;
     /* font-family: 'Playfair Display', serif; */
 }
-.note-card .fa-quote-left{
-    position: absolute;
-    transform: scale(1);
+.note-reminder{
+    height: auto;
+    width: fit-content;
+    display: flex;
+    border-radius: 10px;
+    align-items: center;
+    background-color: rgba(17, 17, 17, 0.13);
+    padding:5px 5px;
 }
-.note-card .fa-quote-right{
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    transform: scale(1);
+.note-reminder svg{
+    height: 1rem;
+    width: 1rem;
+    margin-right: 5px;
+}
+.note-reminder span{
+    font-size: 12px;
 }
 .add-note-btn {
     position: fixed;
-    bottom: 20px;
-    right: 20px;
+    bottom: 15px;
+    right: 15px;
     z-index: 999;
     height: 60px;
     width: 60px;

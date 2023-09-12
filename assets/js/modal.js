@@ -9,7 +9,7 @@ function setupEventListeners(){
         modalContainer.classList.add('modal-container');
   
         modalContainer.innerHTML = `
-            <div class="modal-content">
+            <div class="modal-content add-note">
                 <div class="modal-main">
                     <div class="modal-header">
                         <input type="text" placeholder="Title">
@@ -84,20 +84,21 @@ window.addEventListener("hashchange", setupEventListeners);
       return `<ul class="background-image">${background}</ul>`
   }
   
-  function reminder(element){
-      if (element.classList.contains("active")) {
-          element.classList.remove("active");
-      } else {
-          element.classList.add("active");
-      }
-  }
-  function backgroundColor(element){
-      if (element.classList.contains("active")) {
-          element.classList.remove("active");
-      } else {
-          element.classList.add("active");
-      }
-  }function archive(){
+//   function reminder(element){
+//       if (element.classList.contains("active")) {
+//           element.classList.remove("active");
+//       } else {
+//           element.classList.add("active");
+//       }
+//   }
+//   function backgroundColor(element){
+//       if (element.classList.contains("active")) {
+//           element.classList.remove("active");
+//       } else {
+//           element.classList.add("active");
+//       }
+//   }
+  function archive(){
       alert()
   }
   function deleteBtn(){

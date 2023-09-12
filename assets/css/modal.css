@@ -12,18 +12,19 @@
     background-color: rgba(0, 0, 0, 0.432);
 }
 .modal-content{
-    
     max-width: 600px;
     min-width: 250px;
     width: 100%;
-    margin: 10px;
+    margin: 15px;
     height: auto;
     max-height: 400px;
-    /* background: linear-gradient(25deg, rgba(218,175,203,1) 0%, rgba(188,171,232,1) 50%, rgba(188,171,232,1) 50%, rgba(228,205,223,1) 100%); */
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
     border-radius: 10px;
+}
+.modal-content.add-note{
+    background: linear-gradient(25deg, rgba(218,175,203,1) 0%, rgba(188,171,232,1) 50%, rgba(188,171,232,1) 50%, rgba(228,205,223,1) 100%);
 }
 .modal-main{
     width: auto;
@@ -32,7 +33,7 @@
     overflow: auto;
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 0px;
     padding: 20px;
 }
 .modal-header{
@@ -62,17 +63,38 @@
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    /* background-color: rgba(0, 0, 0, 0.199); */
+    position: relative;
 }
-.modal-header button i{
-    transform: scale(1.2);
+.modal-header button:hover{
+    background-color: rgba(0, 0, 0, 0.199);
 }
+.modal-header button svg{
+    height: 1.2rem;
+    width: 1.2rem;
+}
+.modal-header button span {
+    position: absolute;
+    transform: rotate(35deg); /* Adjust the rotation angle to your preference */
+    height: 2px;
+    width: 1.5rem;
+    background-color: black;
+    border-radius: 50px;
+}
+
 .modal-body{
     width: 100%;
     height: auto;
     background-color:transparent;
 }
-.modal-body textarea{
+.modal-body textarea {
+    width: 100%;
+    height: auto;
+    resize: none;
+    background-color: transparent;
+    border: none;
+    font-size: 1rem;
+}
+.modal-container.add-note .modal-body textarea {
     width: 100%;
     height: auto;
     min-height: 50px;
@@ -80,7 +102,6 @@
     background-color: transparent;
     border: none;
     font-size: 1rem;
-    color: black;
 }
 .modal-body textarea:focus{
     outline: none;
@@ -103,7 +124,7 @@
 .modal-footer .footer-btn{
     display: flex;
     gap: 5px;
-    margin-left: 20px;
+    margin-left: 15px;
 }
 .footer-btn a{
     height: 30px;
@@ -117,9 +138,11 @@
 .footer-btn a:hover,.footer-btn a.active {
     background-color: rgba(0, 0, 0, 0.226);
 }
-.footer-btn a i{
-    color: black;
+.footer-btn a svg{
+   height: 1.4rem;
+   width: 1.4rem;
 }
+
 .footer-btn a ul.reminder{
     width: auto;
     position: absolute;
