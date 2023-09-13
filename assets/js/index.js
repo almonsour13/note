@@ -116,30 +116,21 @@ function clickCard(element) {
   if (matchingItem) {
     const reminderString = matchingItem.reminder;
 
-     const reminderDate = new Date(reminderString);
+    const reminderDate = new Date(reminderString);
 
-
-      const options = {
-        month: 'short',
-        day: 'numeric',
-        hour: 'numeric',
-        minute: 'numeric',
-      };
+    const options = {
+      month: 'short',
+      day: 'numeric',
+      hour: 'numeric',
+      minute: 'numeric',
+    };
     
     let formattedReminder = reminderDate.toLocaleDateString('en-US', options);
+    const currentDate = new Date();
+    const differenceInMilliseconds = reminderDate - currentDate;
+    const daysDifference = Math.floor(differenceInMilliseconds / (1000 * 60 * 60 * 24));
+    const monthsDifference = Math.floor(differenceInMilliseconds / (1000 * 60 * 60 * 24 * 30.44));
 
-
-
-      const currentDate = new Date();
-
-      const differenceInMilliseconds = reminderDate - currentDate;
-
-      const daysDifference = Math.floor(differenceInMilliseconds / (1000 * 60 * 60 * 24));
-
-      const monthsDifference = Math.floor(differenceInMilliseconds / (1000 * 60 * 60 * 24 * 30.44));
-
-
-      
     const body = document.body;
 
     const modalContainer = document.createElement('div');
@@ -165,32 +156,24 @@ function clickCard(element) {
                       <textarea id="autoresize" placeholder="Note">${matchingItem.content}</textarea>
                       
                   </div>
-                    ${matchingItem.reminder ?`
-                        <div class="note-reminder-container">
-                 <div class="note-reminder ${currentDate > reminderDate?`active`:``                       }">
-
-                    <svg class="menu-svg" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24">
-                        <path d="M160-200v-80h80v-280q0-83 50-147.5T420-792v-28q0-25 17.5-42.5T480-880q25 0 42.5 17.5T540-820v28q80 20 130 84.5T720-560v280h80v80H160Zm320-300Zm0 420q-33 0-56.5-23.5T400-160h160q0 33-23.5 56.5T480-80ZM320-280h320v-280q0-66-47-113t-113-47q-66 0-113 47t-47 113v280Z" fill="black"/>
-                    </svg>
-                    <span>${formattedReminder}</span>
-                    </div>
-                    <div class="days-left">
-
-                    ${currentDate < reminderDate?`
-
-                     <p>${daysDifference} ${daysDifference == 1?"day":"days"} left<p/>`
-                     :
-                     `<p class="markAsDone()">Mark as done</p>`
-                    }
-                    </div>
+                  ${matchingItem.reminder ?`
+                    <div class="note-reminder-container">
+                      <div class="note-reminder ${currentDate > reminderDate?`active`:``}">
+                        <svg class="menu-svg" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24">
+                            <path d="M160-200v-80h80v-280q0-83 50-147.5T420-792v-28q0-25 17.5-42.5T480-880q25 0 42.5 17.5T540-820v28q80 20 130 84.5T720-560v280h80v80H160Zm320-300Zm0 420q-33 0-56.5-23.5T400-160h160q0 33-23.5 56.5T480-80ZM320-280h320v-280q0-66-47-113t-113-47q-66 0-113 47t-47 113v280Z" fill="black"/>
+                        </svg>
+                        <span>${formattedReminder}</span>
+                        </div>
+                        <div class="days-left">
+                        ${currentDate < reminderDate?``:
+                         `<p class="markAsDone()">Mark as done</p>`
+                        }
+                      </div>
                     </div>`
-                    :
-                    ""
+                      :
+                      ""
                    }
-                  
               </div>
-              
-              
               <!-- Modal Footer with Action Buttons -->
               <div class="modal-footer">
                   <div class="footer-btn">
@@ -239,7 +222,6 @@ function clickCard(element) {
 
     const textarea = modalContainer.querySelector('#autoresize');
     textarea.style.height = `${textarea.scrollHeight}px`;
-
   }
 }
 
@@ -289,8 +271,7 @@ function notes() {
             <div class="note-card" 
                  style="${item.backgroundImage ? `background-image: url('${item.backgroundImage}');` : `background-color: ${item.color};`}"
                  onclick="clickCard(this)"
-                 noteID="${item.id}"
-            >
+                 noteID="${item.id}">
                 ${item.author ? `<div class="note-title">${item.author}</div>` : ''}
                 <div class="note-content">
                     ${item.content ? `<p>${item.content}</p>` : `<p class="empty-note">Empty Note</p>`}
@@ -370,32 +351,31 @@ function reminderNotes() {
 
 
       htmlContent +=
-        `<div class="note-card" 
+             `<div class="note-card" 
                    style="${item.backgroundImage ? `background-image: url('${item.backgroundImage}');` : `background-color: ${item.color};`}"
                    onclick="clickCardReminder(this)"
                    noteID="${item.id}">
+
                   ${item.author ? `<div class="note-title">${item.author}</div>` : ''}
                   <div class="note-content">
                       <p>${item.content ? item.content : "Empty Note"}</p>
                   </div>
                   ${item.reminder ?`
-
-
-                        <div class="note-reminder-container">
+                    <div class="note-reminder-container">
                           <div class="note-reminder ${currentDate > reminderDate?`active`:``
                      }">
-                            <svg class="menu-svg" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24">
-                                <path d="M160-200v-80h80v-280q0-83 50-147.5T420-792v-28q0-25 17.5-42.5T480-880q25 0 42.5 17.5T540-820v28q80 20 130 84.5T720-560v280h80v80H160Zm320-300Zm0 420q-33 0-56.5-23.5T400-160h160q0 33-23.5 56.5T480-80ZM320-280h320v-280q0-66-47-113t-113-47q-66 0-113 47t-47 113v280Z" fill="black"/>
-                    </svg>
-                    <span>${formattedReminder}</span>
-                    </div> 
-                    <div class="days-left">
-                    ${currentDate < reminderDate?`
-                     <p>${daysDifference} ${daysDifference == 1?"day":"days"} left<p/>`
-                     :
-                     `<p class="markAsDone()">Mark as done</p>`
-                    }
-                    </div>
+                      <svg class="menu-svg" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24">
+                        <path d="M160-200v-80h80v-280q0-83 50-147.5T420-792v-28q0-25 17.5-42.5T480-880q25 0 42.5 17.5T540-820v28q80 20 130 84.5T720-560v280h80v80H160Zm320-300Zm0 420q-33 0-56.5-23.5T400-160h160q0 33-23.5 56.5T480-80ZM320-280h320v-280q0-66-47-113t-113-47q-66 0-113 47t-47 113v280Z" fill="black"/>
+                      </svg>
+                      <span>${formattedReminder}</span>
+                      </div> 
+                      <div class="days-left">
+                      ${currentDate < reminderDate?`
+                      <p>${daysDifference} ${daysDifference == 1?"day":"days"} left<p/>`
+                      :
+                      `<p class="markAsDone()">Mark as done</p>`
+                      }
+                      </div>
                     </div>`
                     :
                     ""
@@ -437,8 +417,7 @@ function archiveNotes() {
         `;
     }
   });
-
-  return `
+return `
     <div class="pin-notes">
       <div class="note-card-container">
           ${htmlContent}
