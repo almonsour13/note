@@ -50,6 +50,7 @@
     border: none;
     font-size: 1.4rem;
     color: black;
+    min-width: 100px;
 }
 .modal-header input:focus{
     outline: none;

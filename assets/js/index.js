@@ -3,7 +3,7 @@ function isMobileDevice() {
   const userAgent = navigator.userAgent;
 
   if (mobileKeywords.test(userAgent)) {
-  document.body.classList.add("mobile");
+    document.body.classList.add("mobile");
   } else {
     document.body.classList.remove("mobile");
   }
@@ -13,30 +13,32 @@ isMobileDevice();
 window.addEventListener("resize", isMobileDevice);
 
 function menuButton(element) {
-    if (element.classList.contains("active")) {
-        element.classList.remove("active"); 
-        document.querySelector('aside').classList.remove("active"); 
-    } else {
-        element.classList.add("active");
-        document.querySelector('aside').classList.add("active"); 
-    }
+  if (element.classList.contains("active")) {
+    element.classList.remove("active");
+    document.querySelector('aside').classList.remove("active");
+  } else {
+    element.classList.add("active");
+    document.querySelector('aside').classList.add("active");
+  }
 }
-function closeMenuButton(){
+
+function closeMenuButton() {
   const aside = document.querySelector('aside');
   if (aside.classList.contains("active")) {
-    aside.classList.remove("active");  
+    aside.classList.remove("active");
     document.querySelector('.menu-button').classList.remove("active");
   } else {
     aside.classList.add("active");
     document.querySelector('.menu-button').classList.remove("active")
   }
 }
+
 function asideClick(event) {
   const target = event.target;
   if (target.tagName === 'ASIDE') {
     const aside = event.currentTarget;
     if (aside.classList.contains("active")) {
-      aside.classList.remove("active");  
+      aside.classList.remove("active");
       document.querySelector('.menu-button').classList.remove("active");
     } else {
       aside.classList.add("active");
@@ -44,10 +46,11 @@ function asideClick(event) {
     }
   }
 }
-function changeMenu(event){
+
+function changeMenu(event) {
   const aside = document.querySelector('aside');
   if (aside.classList.contains("active")) {
-    aside.classList.remove("active");  
+    aside.classList.remove("active");
     document.querySelector('.menu-button').classList.remove("active");
   } else {
     aside.classList.add("active");
@@ -57,50 +60,50 @@ function changeMenu(event){
 
 //function to change the active class-----------------------------------------------------------
 function changeMenuListActive(activeClass) {
-    const menuItems = document.querySelectorAll('.menu-list');
-    menuItems.forEach(item => {
-        if ("#"+activeClass === item.getAttribute('href')) {
-            item.classList.add('active');
-        } else {
-            item.classList.remove('active');
-        }
-    });
-
-    const pageTitle = document.getElementsByClassName('logo-container')[0]; 
-    if (activeClass === "/") {
-        pageTitle.textContent = "Note"; 
-    } else if (activeClass === "/tasks") {
-        pageTitle.textContent = "Tasks";
-    }else if (activeClass === "/reminder") {
-        pageTitle.textContent = "Reminder";
-    }else if (activeClass === "/archive") {
-        pageTitle.textContent = "Archive";
-    }else if (activeClass === "/trash") {
-        pageTitle.textContent = "Trash";
+  const menuItems = document.querySelectorAll('.menu-list');
+  menuItems.forEach(item => {
+    if ("#" + activeClass === item.getAttribute('href')) {
+      item.classList.add('active');
+    } else {
+      item.classList.remove('active');
     }
+  });
+
+  const pageTitle = document.getElementsByClassName('logo-container')[0];
+  if (activeClass === "/") {
+    pageTitle.textContent = "Note";
+  } else if (activeClass === "/tasks") {
+    pageTitle.textContent = "Tasks";
+  } else if (activeClass === "/reminder") {
+    pageTitle.textContent = "Reminder";
+  } else if (activeClass === "/archive") {
+    pageTitle.textContent = "Archive";
+  } else if (activeClass === "/trash") {
+    pageTitle.textContent = "Trash";
+  }
 
 }
 
 function handleRoute() {
-    const route = window.location.hash.slice(1) || '/';
-    const contentDiv = document.querySelector('.content-container');
+  const route = window.location.hash.slice(1) || '/';
+  const contentDiv = document.querySelector('.content-container');
 
-    const pageMapping = {
-        '/': notes(),
-        '/reminder': reminderNotes(), 
-        '/archive': archiveNotes(), 
-        '/trash': trashNotes(), 
-        
-    };
+  const pageMapping = {
+    '/': notes(),
+    '/reminder': reminderNotes(),
+    '/archive': archiveNotes(),
+    '/trash': trashNotes(),
 
-    if (pageMapping[route]) {
-        contentDiv.innerHTML = pageMapping[route];
-        changeMenuListActive(route);
-    } else {
-        contentDiv.innerHTML = '<h1>Page Not Found</h1>';
-    }
-    document.querySelector('.menu-button').classList.remove("active")
-    document.querySelector('aside').classList.remove("active")
+  };
+
+  if (pageMapping[route]) {
+    contentDiv.innerHTML = pageMapping[route];
+    changeMenuListActive(route);
+  } else {
+    contentDiv.innerHTML = '<h1>Page Not Found</h1>';
+  }
+  document.querySelector('.menu-button').classList.remove("active")
+  document.querySelector('aside').classList.remove("active")
 }
 
 window.addEventListener('hashchange', handleRoute);
@@ -111,12 +114,12 @@ function clickCard(element) {
   const matchingItem = content().find(item => element.getAttribute("noteID") == item.id);
 
   if (matchingItem) {
-      const body = document.body;
+    const body = document.body;
 
-      const modalContainer = document.createElement('div');
-      modalContainer.classList.add('modal-container');
+    const modalContainer = document.createElement('div');
+    modalContainer.classList.add('modal-container');
 
-      modalContainer.innerHTML = `
+    modalContainer.innerHTML = `
           <div class="modal-content" 
               style="${matchingItem.backgroundImage ? `background-image: url('${matchingItem.backgroundImage}');` : `background-color: ${matchingItem.color};`}">
               <!-- Modal Header with Title and Pin Button -->
@@ -134,6 +137,7 @@ function clickCard(element) {
                   <!-- Modal Body with Textarea for Note -->
                   <div class="modal-body">
                       <textarea id="autoresize" placeholder="Note">${matchingItem.content}</textarea>
+                     
                   </div>
               </div>
               <!-- Modal Footer with Action Buttons -->
@@ -180,33 +184,35 @@ function clickCard(element) {
               </div>
           </div>
       `;
-      body.appendChild(modalContainer);
-  
-      const textarea = modalContainer.querySelector('#autoresize');
-      textarea.style.height = `${textarea.scrollHeight}px`;
-      
+    body.appendChild(modalContainer);
+
+    const textarea = modalContainer.querySelector('#autoresize');
+    textarea.style.height = `${textarea.scrollHeight}px`;
+
   }
 }
+
 function notes() {
-  let pinnedNotes  = '';
-  let unpinNotes  = '';
+  let pinnedNotes = '';
+  let unpinNotes = '';
   content().forEach(item => {
-      if (!item.archive && !item.delete) {
-        const reminderString = item.reminder;
-        const reminderDate = new Date(reminderString);
+    if (!item.archive && !item.delete) {
+      const reminderString = item.reminder;
+      const reminderDate = new Date(reminderString);
 
-        const options = {
-          year: 'numeric',
-          month: 'short',
-          day: 'numeric',
-          hour: 'numeric',
-          minute: 'numeric',
-        };
+      const options = {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+        hour: 'numeric',
+        minute: 'numeric',
+      };
 
-        let formattedReminder = reminderDate.toLocaleDateString('en-US', options);
+      let formattedReminder = reminderDate.toLocaleDateString('en-US', options);
+      const currentDate = new Date();
 
-          if(item.pin){
-            pinnedNotes += `
+      if (item.pin) {
+        pinnedNotes += `
               <div class="note-card" 
                    style="${item.backgroundImage ? `background-image: url('${item.backgroundImage}');` : `background-color: ${item.color};`}"
                    onclick="clickCard(this)"
@@ -216,7 +222,8 @@ function notes() {
                       <p>${item.content ? item.content : "Empty Note"}</p>
                   </div>
                   ${item.reminder ?`
-                    <div class="note-reminder">
+                     <div class="note-reminder ${currentDate > reminderDate?`active`:``
+                     }">
                       <svg class="menu-svg" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24">
                           <path d="M160-200v-80h80v-280q0-83 50-147.5T420-792v-28q0-25 17.5-42.5T480-880q25 0 42.5 17.5T540-820v28q80 20 130 84.5T720-560v280h80v80H160Zm320-300Zm0 420q-33 0-56.5-23.5T400-160h160q0 33-23.5 56.5T480-80ZM320-280h320v-280q0-66-47-113t-113-47q-66 0-113 47t-47 113v280Z" fill="black"/>
                       </svg>
@@ -227,8 +234,8 @@ function notes() {
                    }
               </div>
             `
-          }else{
-            unpinNotes += `
+      } else {
+        unpinNotes += `
             <div class="note-card" 
                  style="${item.backgroundImage ? `background-image: url('${item.backgroundImage}');` : `background-color: ${item.color};`}"
                  onclick="clickCard(this)"
@@ -239,7 +246,7 @@ function notes() {
                     <p>${item.content ? item.content : "Empty Note"}</p>
                 </div>
                 ${item.reminder ?`
-                  <div class="note-reminder">
+                 <div class="note-reminder ${currentDate > reminderDate?`active`:``                       }">
                     <svg class="menu-svg" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24">
                         <path d="M160-200v-80h80v-280q0-83 50-147.5T420-792v-28q0-25 17.5-42.5T480-880q25 0 42.5 17.5T540-820v28q80 20 130 84.5T720-560v280h80v80H160Zm320-300Zm0 420q-33 0-56.5-23.5T400-160h160q0 33-23.5 56.5T480-80ZM320-280h320v-280q0-66-47-113t-113-47q-66 0-113 47t-47 113v280Z" fill="black"/>
                     </svg>
@@ -250,10 +257,10 @@ function notes() {
                 }
             </div>
           `
-          }
       }
+    }
   });
-  
+
   return `
       ${pinnedNotes?`
           <p class="label">Pinned</p>
@@ -281,11 +288,12 @@ function notes() {
     `;
 }
 
-function reminderNotes(){
+function reminderNotes() {
   let htmlContent = '';
   content().forEach(item => {
-    if (item.reminder && !item.archive) { 
+    if (item.reminder && !item.archive) {
       const reminderString = item.reminder;
+
       const reminderDate = new Date(reminderString);
 
       const options = {
@@ -298,8 +306,21 @@ function reminderNotes(){
 
       let formattedReminder = reminderDate.toLocaleDateString('en-US', options);
 
-        htmlContent += 
-              `<div class="note-card" 
+      const currentDate = new Date();
+
+      const differenceInMilliseconds = reminderDate - currentDate;
+
+      const daysDifference = Math.floor(differenceInMilliseconds / (1000 * 60 * 60 * 24));
+
+      const monthsDifference = Math.floor(differenceInMilliseconds / (1000 * 60 * 60 * 24 * 30.44));
+
+      console.log(`Formatted Reminder Date: ${formattedReminder}`);
+      console.log(`Days left: ${daysDifference}`);
+      console.log(`Months left: ${monthsDifference}`);
+
+
+      htmlContent +=
+        `<div class="note-card" 
                    style="${item.backgroundImage ? `background-image: url('${item.backgroundImage}');` : `background-color: ${item.color};`}"
                    onclick="clickCard(this)"
                    noteID="${item.id}">
@@ -308,11 +329,23 @@ function reminderNotes(){
                       <p>${item.content ? item.content : "Empty Note"}</p>
                   </div>
                   ${item.reminder ?`
-                    <div class="note-reminder">
-                      <svg class="menu-svg" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24">
-                          <path d="M160-200v-80h80v-280q0-83 50-147.5T420-792v-28q0-25 17.5-42.5T480-880q25 0 42.5 17.5T540-820v28q80 20 130 84.5T720-560v280h80v80H160Zm320-300Zm0 420q-33 0-56.5-23.5T400-160h160q0 33-23.5 56.5T480-80ZM320-280h320v-280q0-66-47-113t-113-47q-66 0-113 47t-47 113v280Z" fill="black"/>
-                      </svg>
-                      <span>${formattedReminder}</span>
+
+
+                        <div class="note-reminder-container">
+                          <div class="note-reminder ${currentDate > reminderDate?`active`:``
+                     }">
+                            <svg class="menu-svg" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24">
+                                <path d="M160-200v-80h80v-280q0-83 50-147.5T420-792v-28q0-25 17.5-42.5T480-880q25 0 42.5 17.5T540-820v28q80 20 130 84.5T720-560v280h80v80H160Zm320-300Zm0 420q-33 0-56.5-23.5T400-160h160q0 33-23.5 56.5T480-80ZM320-280h320v-280q0-66-47-113t-113-47q-66 0-113 47t-47 113v280Z" fill="black"/>
+                    </svg>
+                    <span>${formattedReminder}</span>
+                    </div> 
+                    <div class="days-left">
+                    ${currentDate < reminderDate?`
+                     <p>${daysDifference} ${daysDifference == 1?"day":"days"} left<p/>`
+                     :
+                     `<p class="markAsDone()">Mark as done</p>`
+                    }
+                    </div>
                     </div>`
                     :
                     ""
@@ -320,9 +353,9 @@ function reminderNotes(){
               </div>
             `
     }
-});
+  });
 
-return `
+  return `
     <div class="pin-notes">
       <div class="note-card-container">
           ${htmlContent}
@@ -335,11 +368,12 @@ return `
     </div>
 `;
 }
-function archiveNotes(){
+
+function archiveNotes() {
   let htmlContent = '';
   content().forEach(item => {
     if (item.archive) { // Check if the 'archive' property is not true
-        htmlContent += `
+      htmlContent += `
             <div class="note-card" 
                  style="${item.backgroundImage ? `background-image: url('${item.backgroundImage}');` : `background-color: ${item.color};`}"
                  onclick="clickCard(this)"
@@ -352,27 +386,23 @@ function archiveNotes(){
             </div>
         `;
     }
-});
+  });
 
-return `
+  return `
     <div class="pin-notes">
       <div class="note-card-container">
           ${htmlContent}
       </div>
     </div>
-    <div class="add-note-btn">
-      <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24">
-        <path d="M440-240h80v-120h120v-80H520v-120h-80v120H320v80h120v120ZM240-80q-33 0-56.5-23.5T160-160v-640q0-33 23.5-56.5T240-880h320l240 240v480q0 33-23.5 56.5T720-80H240Zm280-520v-200H240v640h480v-440H520ZM240-800v200-200 640-640Z"/>
-      </svg>
-    </div>
 `;
 
 }
-function trashNotes(){
+
+function trashNotes() {
   let htmlContent = '';
   content().forEach(item => {
     if (item.delete) { // Check if the 'archive' property is not true
-        htmlContent += `
+      htmlContent += `
             <div class="note-card" 
                  style="${item.backgroundImage ? `background-image: url('${item.backgroundImage}');` : `background-color: ${item.color};`}"
                  onclick="clickCard(this)"
@@ -385,22 +415,18 @@ function trashNotes(){
             </div>
         `;
     }
-});
+  });
 
-return `
+  return `
     <p class="label">Delete after 7 days</p>
     <div class="pin-notes">
       <div class="note-card-container">
           ${htmlContent}
       </div>
     </div>
-    <div class="add-note-btn">
-      <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24">
-        <path d="M440-240h80v-120h120v-80H520v-120h-80v120H320v80h120v120ZM240-80q-33 0-56.5-23.5T160-160v-640q0-33 23.5-56.5T240-880h320l240 240v480q0 33-23.5 56.5T720-80H240Zm280-520v-200H240v640h480v-440H520ZM240-800v200-200 640-640Z"/>
-      </svg>
-    </div>
 `;
 }
+
 function content() {
   const content = [
     {
@@ -422,7 +448,7 @@ function content() {
       "backgroundImage": "assets/images/background-image-1.png",
       "archive": false,
       "delete": false,
-      "reminder": "2023-09-20T14:30:00",
+      "reminder": "2023-09-12T14:30:00",
       "pin": true
     },
     {
@@ -515,22 +541,3 @@ function content() {
   ];
   return content;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

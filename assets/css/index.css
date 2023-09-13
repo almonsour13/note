@@ -149,6 +149,7 @@ aside.active .menu-list-container a{
 }
 .content-container .label{
     margin-left: 15px;
+    color:rgba(17, 17, 17, 0.7);;
 }
 .pin-notes, .unpin-notes{
     width: 100%;

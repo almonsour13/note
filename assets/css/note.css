@@ -48,6 +48,13 @@
     word-wrap: break-word;
     /* font-family: 'Playfair Display', serif; */
 }
+.note-reminder-container{
+  display:flex;
+  justify-content: space-between;
+  align-items: center;
+  height: auto;
+  width:100%;
+}
 .note-reminder{
     height: auto;
     width: fit-content;
@@ -61,9 +68,19 @@
     height: 1rem;
     width: 1rem;
     margin-right: 5px;
+    fill: red;
 }
 .note-reminder span{
     font-size: 12px;
+}
+.note-reminder.active span{
+    color:red;
+}
+.note-reminder.active svg path{
+  fill:red;
+}
+.days-left{
+  font-size: 12px;
 }
 .add-note-btn {
     position: fixed;
