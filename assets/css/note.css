@@ -48,6 +48,9 @@
     word-wrap: break-word;
     /* font-family: 'Playfair Display', serif; */
 }
+.note-card .note-content p.empty-note{
+  color: gray;
+}
 .note-reminder-container{
   display:flex;
   justify-content: space-between;
@@ -61,8 +64,8 @@
     display: flex;
     border-radius: 10px;
     align-items: center;
-    background-color: rgba(17, 17, 17, 0.13);
-    padding:5px 5px;
+ /*   background-color: rgba(17, 17, 17, 0.13);
+    padding:5px 5px;*/
 }
 .note-reminder svg{
     height: 1rem;

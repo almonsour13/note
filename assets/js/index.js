@@ -293,7 +293,7 @@ function notes() {
             >
                 ${item.author ? `<div class="note-title">${item.author}</div>` : ''}
                 <div class="note-content">
-                    <p>${item.content ? item.content : "Empty Note"}</p>
+                    ${item.content ? `<p>${item.content}</p>` : `<p class="empty-note">Empty Note</p>`}
                 </div>
                 ${item.reminder ?`
                  <div class="note-reminder ${currentDate > reminderDate?`active`:``                       }">
@@ -372,7 +372,7 @@ function reminderNotes() {
       htmlContent +=
         `<div class="note-card" 
                    style="${item.backgroundImage ? `background-image: url('${item.backgroundImage}');` : `background-color: ${item.color};`}"
-                   onclick="clickCard(this)"
+                   onclick="clickCardReminder(this)"
                    noteID="${item.id}">
                   ${item.author ? `<div class="note-title">${item.author}</div>` : ''}
                   <div class="note-content">
@@ -426,7 +426,7 @@ function archiveNotes() {
       htmlContent += `
             <div class="note-card" 
                  style="${item.backgroundImage ? `background-image: url('${item.backgroundImage}');` : `background-color: ${item.color};`}"
-                 onclick="clickCard(this)"
+                 onclick="clickCardArchive(this)"
                  noteID="${item.id}"
             >
                 ${item.author ? `<div class="note-title">${item.author}</div>` : ''}
@@ -455,7 +455,7 @@ function trashNotes() {
       htmlContent += `
             <div class="note-card" 
                  style="${item.backgroundImage ? `background-image: url('${item.backgroundImage}');` : `background-color: ${item.color};`}"
-                 onclick="clickCard(this)"
+                 onclick="clickCardTrash(this)"
                  noteID="${item.id}"
             >
                 ${item.author ? `<div class="note-title">${item.author}</div>` : ''}
@@ -503,7 +503,7 @@ function content() {
     },
     {
       "id": 3,
-      "author": "Maya Angelou",
+      "author": "",
       "content": "I've learned that people will forget what you said, people will forget what you did, but people will never forget how you made them feel.",
       "color": "#98FB98",
       "backgroundImage": "assets/images/background-image-4.png",
@@ -537,7 +537,7 @@ function content() {
     {
       "id": 6,
       "author": "Steve Jobs",
-      "content": "Your work is going to fill a large part of your life, and the only way to be truly satisfied is to do what you believe is great work.",
+      "content": "",
       "color": "#F0E68C",
       "backgroundImage": "assets/images/background-image-6.png",
       "archive": false,
