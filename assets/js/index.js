@@ -114,6 +114,32 @@ function clickCard(element) {
   const matchingItem = content().find(item => element.getAttribute("noteID") == item.id);
 
   if (matchingItem) {
+    const reminderString = matchingItem.reminder;
+
+     const reminderDate = new Date(reminderString);
+
+
+      const options = {
+        month: 'short',
+        day: 'numeric',
+        hour: 'numeric',
+        minute: 'numeric',
+      };
+    
+    let formattedReminder = reminderDate.toLocaleDateString('en-US', options);
+
+
+
+      const currentDate = new Date();
+
+      const differenceInMilliseconds = reminderDate - currentDate;
+
+      const daysDifference = Math.floor(differenceInMilliseconds / (1000 * 60 * 60 * 24));
+
+      const monthsDifference = Math.floor(differenceInMilliseconds / (1000 * 60 * 60 * 24 * 30.44));
+
+
+      
     const body = document.body;
 
     const modalContainer = document.createElement('div');
@@ -127,7 +153,7 @@ function clickCard(element) {
                   <div class="modal-header">
                       <input type="text" placeholder="Title" value="${matchingItem.author}">
                       <button class="pin-btn">
-                        <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 384 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M32 32C32 14.3 46.3 0 64 0H320c17.7 0 32 14.3 32 32s-14.3 32-32 32H290.5l11.4 148.2c36.7 19.9 65.7 53.2 79.5 94.7l1 3c3.3 9.8 1.6 20.5-4.4 28.8s-15.7 13.3-26 13.3H32c-10.3 0-19.9-4.9-26-13.3s-7.7-19.1-4.4-28.8l1-3c13.8-41.5 42.8-74.8 79.5-94.7L93.5 64H64C46.3 64 32 49.7 32 32zM160 384h64v96c0 17.7-14.3 32-32 32s-32-14.3-32-32V384z"/></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 384 512">><path d="M32 32C32 14.3 46.3 0 64 0H320c17.7 0 32 14.3 32 32s-14.3 32-32 32H290.5l11.4 148.2c36.7 19.9 65.7 53.2 79.5 94.7l1 3c3.3 9.8 1.6 20.5-4.4 28.8s-15.7 13.3-26 13.3H32c-10.3 0-19.9-4.9-26-13.3s-7.7-19.1-4.4-28.8l1-3c13.8-41.5 42.8-74.8 79.5-94.7L93.5 64H64C46.3 64 32 49.7 32 32zM160 384h64v96c0 17.7-14.3 32-32 32s-32-14.3-32-32V384z"/></svg>
                         ${matchingItem.pin?
                           `<span></span>`
                           :""
@@ -137,9 +163,34 @@ function clickCard(element) {
                   <!-- Modal Body with Textarea for Note -->
                   <div class="modal-body">
                       <textarea id="autoresize" placeholder="Note">${matchingItem.content}</textarea>
-                     
+                      
                   </div>
+                    ${matchingItem.reminder ?`
+                        <div class="note-reminder-container">
+                 <div class="note-reminder ${currentDate > reminderDate?`active`:``                       }">
+
+                    <svg class="menu-svg" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24">
+                        <path d="M160-200v-80h80v-280q0-83 50-147.5T420-792v-28q0-25 17.5-42.5T480-880q25 0 42.5 17.5T540-820v28q80 20 130 84.5T720-560v280h80v80H160Zm320-300Zm0 420q-33 0-56.5-23.5T400-160h160q0 33-23.5 56.5T480-80ZM320-280h320v-280q0-66-47-113t-113-47q-66 0-113 47t-47 113v280Z" fill="black"/>
+                    </svg>
+                    <span>${formattedReminder}</span>
+                    </div>
+                    <div class="days-left">
+
+                    ${currentDate < reminderDate?`
+
+                     <p>${daysDifference} ${daysDifference == 1?"day":"days"} left<p/>`
+                     :
+                     `<p class="markAsDone()">Mark as done</p>`
+                    }
+                    </div>
+                    </div>`
+                    :
+                    ""
+                   }
+                  
               </div>
+              
+              
               <!-- Modal Footer with Action Buttons -->
               <div class="modal-footer">
                   <div class="footer-btn">
@@ -201,7 +252,6 @@ function notes() {
       const reminderDate = new Date(reminderString);
 
       const options = {
-        year: 'numeric',
         month: 'short',
         day: 'numeric',
         hour: 'numeric',
@@ -297,7 +347,7 @@ function reminderNotes() {
       const reminderDate = new Date(reminderString);
 
       const options = {
-        year: 'numeric',
+ 
         month: 'short',
         day: 'numeric',
         hour: 'numeric',
