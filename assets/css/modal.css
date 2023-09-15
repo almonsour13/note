@@ -147,7 +147,7 @@
 .footer-btn a ul.reminder{
     width: auto;
     position: absolute;
-    top: -114px;
+    top: -112px;
     left: 0px;
     z-index: 99999;
     display: none;
@@ -173,7 +173,7 @@ a ul.reminder li:hover{
 .footer-btn a .background{
     width: auto;
     position: absolute;
-    top: -110px;
+    top: -109px;
     left: 0px;
     z-index: 99999;
     display: none;
@@ -203,7 +203,7 @@ a .background li{
 }
 a .background li.backgroundImage{
     background-repeat: no-repeat;
-    background-size: cover;
+    background-size: 100px;
     background-position: center;
 }
 a .background li:hover{
