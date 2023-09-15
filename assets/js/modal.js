@@ -37,7 +37,7 @@ function setupEventListeners(){
                       </svg>
                         <div class="background">
                             ${colorPalette()} <!-- Output of colorPalette function -->
-                            ${backgroundImage()} <!-- Output of backgroundImage function -->
+                            ${backgroundImage()} 
                         </div>
                     </a>
                     <!-- Archive Button -->
@@ -66,80 +66,75 @@ function setupEventListeners(){
 }
 setupEventListeners()  
 window.addEventListener("hashchange", setupEventListeners);
-  function colorPalette() {
+function colorPalette() {
       const lightColors = [
-          '#F0E68C', // Khaki
-          '#98FB98', // PaleGreen
-          '#ADD8E6', // LightBlue
-          '#FFD700', // Gold
-          '#FFA07A', // LightSalmon
-          '#FFC0CB', // Pink
-          '#B0E0E6', // PowderBlue
-          '#90EE90'  // LightGreen
+          '#F0E68C', 
+          '#98FB98', 
+          '#ADD8E6', 
+          '#FFD700', 
+          '#FFA07A',
+          '#FFC0CB'
       ];
-      let palette = ''; // Initialize as an empty string
+      let palette = ''; 
       lightColors.forEach(color => {
           palette += `<li style="background-color: ${color};"></li>`;
       });
       return `<ul class="color-palette">${palette}</ul>`
-  }    
-  function backgroundImage(){
-      const backgroundImages = [
-          '#F0E68C', // Khaki
-          '#98FB98', // PaleGreen
-          '#ADD8E6', // LightBlue
-          '#FFD700', // Gold
-          '#FFA07A', // LightSalmon
-          '#FFC0CB', // Pink
-          '#B0E0E6', // PowderBlue
-          '#90EE90'  // LightGreen
+}    
+function backgroundImage(){
+      const backgroundImages = [ 
+          'assets/images/background-image-1.png', 
+          'assets/images/background-image-2.png',
+          'assets/images/background-image-3.png', 
+          'assets/images/background-image-4.png', 
+          'assets/images/background-image-5.png',
+          'assets/images/background-image-6.png'
       ];
-      let background = ''; // Initialize as an empty string
-      backgroundImages.forEach(color => {
-          background += `<li style="background-color: ${color};"></li>`;
+      let background = '';
+      backgroundImages.forEach(image => {
+          background += `<li class="backgroundImage" style="background-image: url(${image});"></li>`;
       });
       return `<ul class="background-image">${background}</ul>`
-  }
+}
   
-//   function reminder(element){
-//       if (element.classList.contains("active")) {
-//           element.classList.remove("active");
-//       } else {
-//           element.classList.add("active");
-//       }
-//   }
-//   function backgroundColor(element){
-//       if (element.classList.contains("active")) {
-//           element.classList.remove("active");
-//       } else {
-//           element.classList.add("active");
-//       }
-//   }
-  function archive(){
-      alert()
+function reminder(element){
+    if (element.classList.contains("active")) {
+        element.classList.remove("active");
+    } else {
+        element.classList.add("active");
+    }
   }
-  function deleteBtn(){
+function backgroundColor(element){
+    if (element.classList.contains("active")) {
+        element.classList.remove("active");
+    } else {
+        element.classList.add("active");
+    }
+}
+function archive(){
       alert()
-  }
-  function closeModal(event) {
+}
+function deleteBtn(){
+      alert()
+}
+function closeModal(event) {
     event.preventDefault()
-      const modalContainer = event.target.closest('.modal-container');
-      if (modalContainer) {
-          modalContainer.remove();
-      }
-  }
-  function autoResizeTextarea() {
-      const textarea = document.getElementById('autoresize');
-      textarea.style.height = 'auto';
-      textarea.style.height = (textarea.scrollHeight) + 'px';
-  }
+    const modalContainer = event.target.closest('.modal-container');
+    if (modalContainer) {
+        modalContainer.remove();
+    }
+}
+function autoResizeTextarea() {
+    const textarea = document.getElementById('autoresize');
+    textarea.style.height = 'auto';
+    textarea.style.height = (textarea.scrollHeight) + 'px';
+}
   
-  // Attach the auto-resize function to textarea input events
-  document.addEventListener('input', function (e) {
-      if (e.target && e.target.id === 'autoresize') {
-          autoResizeTextarea();
-      }
-  });
+ 
+document.addEventListener('input', function (e) {
+    if (e.target && e.target.id === 'autoresize') {
+        autoResizeTextarea();
+    }
+});
   
-  // Call the auto-resize function initially to set the textarea height
-  autoResizeTextarea();
+autoResizeTextarea();
