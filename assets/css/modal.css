@@ -190,7 +190,7 @@ a .background ul{
     display: flex;
     list-style: none;
     gap: 5px;
-}
+} 
 a .background .color-palette{
     padding: 10px 10px 5px 10px;
     border-bottom: 1px  rgba(0, 0, 0, 0.158) solid;
