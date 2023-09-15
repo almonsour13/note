@@ -147,7 +147,7 @@
 .footer-btn a ul.reminder{
     width: auto;
     position: absolute;
-    top: -107px;
+    top: -114px;
     left: 0px;
     z-index: 99999;
     display: none;
@@ -155,8 +155,7 @@
     gap: 5px;
     padding: 10px 0px;
     list-style: none;
-    background-color: white;
-    background-color:white;
+    background: linear-gradient(25deg, rgba(218,175,203,1) 0%, rgba(188,171,232,1) 50%, rgba(188,171,232,1) 50%, rgba(228,205,223,1) 100%);
     box-shadow: 0px 0px 1px 1px rgba(0, 0, 0, 0.158);
     border-radius: 5px;
 }
@@ -178,9 +177,7 @@ a ul.reminder li:hover{
     left: 0px;
     z-index: 99999;
     display: none;
-    justify-content: center;
-    align-items: center;
-    background-color:white;
+    background: linear-gradient(25deg, rgba(218,175,203,1) 0%, rgba(188,171,232,1) 50%, rgba(188,171,232,1) 50%, rgba(228,205,223,1) 100%);
     box-shadow: 0px 0px 1px 1px rgba(0, 0, 0, 0.158);
     border-radius: 10px;
     list-style: none;
@@ -203,6 +200,11 @@ a .background li{
     width: 30px;
     border-radius: 50%;
     border: 2px transparent solid;
+}
+a .background li.backgroundImage{
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
 }
 a .background li:hover{
     border: 2px black solid;
