@@ -69,9 +69,11 @@ function changeMenuListActive(activeClass) {
     }
   });
 
-  const pageTitle = document.getElementsByClassName('logo-container')[0];
+  const pageTitle = document.querySelector('.logo-container');
+  pageTitle.classList.remove("home");
   if (activeClass === "/") {
-    pageTitle.textContent = "Note";
+    pageTitle.textContent = "MemoMagic";
+    pageTitle.classList.add("home");
   } else if (activeClass === "/tasks") {
     pageTitle.textContent = "Tasks";
   } else if (activeClass === "/reminder") {
@@ -91,9 +93,8 @@ function handleRoute() {
   const pageMapping = {
     '/': notes(),
     '/reminder': reminderNotes(),
-    '/archive': archiveNotes(),
+    '/archive':archiveNotes(),
     '/trash': trashNotes(),
-
   };
 
   if (pageMapping[route]) {
@@ -105,7 +106,6 @@ function handleRoute() {
   document.querySelector('.menu-button').classList.remove("active")
   document.querySelector('aside').classList.remove("active")
 }
-
 window.addEventListener('hashchange', handleRoute);
 handleRoute();
 
@@ -130,7 +130,24 @@ function clickCard(element) {
     const differenceInMilliseconds = reminderDate - currentDate;
     const daysDifference = Math.floor(differenceInMilliseconds / (1000 * 60 * 60 * 24));
     const monthsDifference = Math.floor(differenceInMilliseconds / (1000 * 60 * 60 * 24 * 30.44));
+    let dateOutput = ''
+    let timeOutput = ''
 
+    if (!isNaN(reminderDate)) {
+      const year = reminderDate.getFullYear();
+      const month = String(reminderDate.getMonth() + 1).padStart(2, '0'); // Add 1 because months are 0-indexed
+      const day = String(reminderDate.getDate()).padStart(2, '0');
+
+      dateOutput = `${year}-${month}-${day}`;
+
+      // Extract the time part from the reminderString
+      const timeString = reminderString.split(', ')[2]; // Assuming time is the third part
+      const time = new Date(`2000-01-01 ${timeString}`);
+      const hours = time.getHours();
+      const minutes = time.getMinutes();
+      timeOutput = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
+
+    }
     const body = document.body;
 
     const modalContainer = document.createElement('div');
@@ -142,7 +159,7 @@ function clickCard(element) {
               <!-- Modal Header with Title and Pin Button -->
               <div class="modal-main">
                   <div class="modal-header">
-                      <input type="text" placeholder="Title" value="${matchingItem.author}">
+                      <input type="text" placeholder="Title" value="${matchingItem.title}">
                       <button class="pin-btn">
                         <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 384 512">><path d="M32 32C32 14.3 46.3 0 64 0H320c17.7 0 32 14.3 32 32s-14.3 32-32 32H290.5l11.4 148.2c36.7 19.9 65.7 53.2 79.5 94.7l1 3c3.3 9.8 1.6 20.5-4.4 28.8s-15.7 13.3-26 13.3H32c-10.3 0-19.9-4.9-26-13.3s-7.7-19.1-4.4-28.8l1-3c13.8-41.5 42.8-74.8 79.5-94.7L93.5 64H64C46.3 64 32 49.7 32 32zM160 384h64v96c0 17.7-14.3 32-32 32s-32-14.3-32-32V384z"/></svg>
                         ${matchingItem.pin?
@@ -181,11 +198,13 @@ function clickCard(element) {
                       <a href="#" title="Reminder" class="reminder" onclick="reminder(this)">
                       <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24">
                       <path d="M480-80q-33 0-56.5-23.5T400-160h160q0 33-23.5 56.5T480-80ZM160-200v-80h80v-280q0-83 50-147.5T420-792v-28q0-25 17.5-42.5T480-880q25 0 42.5 17.5T540-820v28q18 5 35 11.5t32 16.5q-13 16-22.5 33.5T567-694q-19-12-41-19t-46-7q-66 0-113 47t-47 113v280h320v-123q17 15 37 27.5t43 20.5v75h80v80H160Zm320-300Zm280 60v-120H640v-80h120v-120h80v120h120v80H840v120h-80Z"/></svg>
-                          <ul class="reminder">
-                              <li>Time</li>
-                              <li>Repeat</li>
-                          </ul>
+                         
                       </a>
+                      <ul class="reminder">
+                        <li><p>Date:</p><input type="date" id="dateInput" value="${dateOutput}" ></li>
+                        <li><p>Time:</p><input type="time" id="timeInput" value="${timeOutput}"></li>
+                      </ul>
+
                       <!-- Background Options Button -->
                       <a href="#" title="Background options" class="background" onclick="backgroundColor(this)">
                         <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24">
@@ -212,7 +231,7 @@ function clickCard(element) {
                       </a>
                   </div>
                   <!-- Close Button -->
-                  <div class="close-btn" onclick="closeModal(event)">
+                  <div class="close-btn" onclick="closeNoteModal(event)">
                       close
                   </div>
               </div>
@@ -224,38 +243,60 @@ function clickCard(element) {
     textarea.style.height = `${textarea.scrollHeight}px`;
   }
 }
-
 function notes() {
   let pinnedNotes = '';
   let unpinNotes = '';
-  content().forEach(item => {
-    if (!item.archive && !item.delete) {
-      const reminderString = item.reminder;
-      const reminderDate = new Date(reminderString);
+  if(content()){
+    content().forEach(item => {
+      if (!item.archive && !item.delete) {
+        
+        const reminderString = item.reminder;
+        const reminderDate = new Date(reminderString);
 
-      const options = {
-        month: 'short',
-        day: 'numeric',
-        hour: 'numeric',
-        minute: 'numeric',
-      };
+        const options = {
+          month: 'short',
+          day: 'numeric',
+          hour: 'numeric',
+          minute: 'numeric',
+        };
 
-      let formattedReminder = reminderDate.toLocaleDateString('en-US', options);
-      const currentDate = new Date();
-
-      if (item.pin) {
-        pinnedNotes += `
+        let formattedReminder = reminderDate.toLocaleDateString('en-US', options);
+        const currentDate = new Date();
+        if (item.pin) {
+          pinnedNotes += `
+                <div class="note-card" 
+                    style="${item.backgroundImage ? `background-image: url('${item.backgroundImage}');` : `background-color: ${item.color};`}"
+                    onclick="clickCard(this)"
+                    noteID="${item.id}">
+                    ${item.title ? `<div class="note-title">${item.title}</div>` : ''}
+                    <div class="note-content">
+                        <p>${item.content ? item.content : "Empty Note"}</p>
+                    </div>
+                    ${item.reminder ?`
+                      <div class="note-reminder ${currentDate > reminderDate?`active`:``
+                      }">
+                        <svg class="menu-svg" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24">
+                            <path d="M160-200v-80h80v-280q0-83 50-147.5T420-792v-28q0-25 17.5-42.5T480-880q25 0 42.5 17.5T540-820v28q80 20 130 84.5T720-560v280h80v80H160Zm320-300Zm0 420q-33 0-56.5-23.5T400-160h160q0 33-23.5 56.5T480-80ZM320-280h320v-280q0-66-47-113t-113-47q-66 0-113 47t-47 113v280Z" fill="black"/>
+                        </svg>
+                        <span>${formattedReminder}</span>
+                      </div>`
+                      :
+                      ""
+                    }
+                </div>
+              `
+        } else {     
+          unpinNotes += `
               <div class="note-card" 
-                   style="${item.backgroundImage ? `background-image: url('${item.backgroundImage}');` : `background-color: ${item.color};`}"
-                   onclick="clickCard(this)"
-                   noteID="${item.id}">
-                  ${item.author ? `<div class="note-title">${item.author}</div>` : ''}
+                  style="${item.backgroundImage ? `background-image: url('${item.backgroundImage}');` : `background-color: ${item.color};`}"
+                  onclick="clickCard(this)"
+                  noteID="${item.id}">
+                  ${item.title ? `<div class="note-title">${item.title}</div>` : ''}
                   <div class="note-content">
-                      <p>${item.content ? item.content : "Empty Note"}</p>
+                      ${item.content ? `<p>${item.content}</p>` : `<p class="empty-note">Empty Note</p>`}
                   </div>
                   ${item.reminder ?`
-                     <div class="note-reminder ${currentDate > reminderDate?`active`:``
-                     }">
+                  <div class="note-reminder ${currentDate > reminderDate?`active`:``                       }">
                       <svg class="menu-svg" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24">
                           <path d="M160-200v-80h80v-280q0-83 50-147.5T420-792v-28q0-25 17.5-42.5T480-880q25 0 42.5 17.5T540-820v28q80 20 130 84.5T720-560v280h80v80H160Zm320-300Zm0 420q-33 0-56.5-23.5T400-160h160q0 33-23.5 56.5T480-80ZM320-280h320v-280q0-66-47-113t-113-47q-66 0-113 47t-47 113v280Z" fill="black"/>
                       </svg>
@@ -263,310 +304,207 @@ function notes() {
                     </div>`
                     :
                     ""
-                   }
+                  }
               </div>
             `
-      } else {
-        unpinNotes += `
-            <div class="note-card" 
-                 style="${item.backgroundImage ? `background-image: url('${item.backgroundImage}');` : `background-color: ${item.color};`}"
-                 onclick="clickCard(this)"
-                 noteID="${item.id}">
-                ${item.author ? `<div class="note-title">${item.author}</div>` : ''}
-                <div class="note-content">
-                    ${item.content ? `<p>${item.content}</p>` : `<p class="empty-note">Empty Note</p>`}
-                </div>
-                ${item.reminder ?`
-                 <div class="note-reminder ${currentDate > reminderDate?`active`:``                       }">
-                    <svg class="menu-svg" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24">
-                        <path d="M160-200v-80h80v-280q0-83 50-147.5T420-792v-28q0-25 17.5-42.5T480-880q25 0 42.5 17.5T540-820v28q80 20 130 84.5T720-560v280h80v80H160Zm320-300Zm0 420q-33 0-56.5-23.5T400-160h160q0 33-23.5 56.5T480-80ZM320-280h320v-280q0-66-47-113t-113-47q-66 0-113 47t-47 113v280Z" fill="black"/>
-                    </svg>
-                    <span>${formattedReminder}</span>
-                  </div>`
-                  :
-                  ""
-                }
-            </div>
-          `
+        }
       }
-    }
-  });
-
+    });
+  }
   return `
-      ${pinnedNotes?`
-          <p class="label">Pinned</p>
-          <div class="pin-notes">
-            <div class="note-card-container" id="pinNotes">
-              ${pinnedNotes}
-            </div>
-          </div>`
-          :""
+          ${content() ? (
+            (pinnedNotes ? `
+              <p class="label">Pinned</p>
+              <div class="pin-notes">
+                <div class="note-card-container" id="pinNotes">
+                  ${pinnedNotes}
+                </div>
+              </div>`
+              : ''
+            ) +
+            (unpinNotes ? (
+              (pinnedNotes ? `<p class="label">Others</p>` : '') +
+              `<div class="unpin-notes">
+                <div class="note-card-container" id="pinNotes">
+                  ${unpinNotes}
+                </div>
+              </div>`
+            ) : "")
+          ) : '<div class="no-notes">No notes</>'}
+          <div class="add-note-btn">
+            <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24">
+              <path d="M440-240h80v-120h120v-80H520v-120h-80v120H320v80h120v120ZM240-80q-33 0-56.5-23.5T160-160v-640q0-33 23.5-56.5T240-880h320l240 240v480q0 33-23.5 56.5T720-80H240Zm280-520v-200H240v640h480v-440H520ZM240-800v200-200 640-640Z"/>
+            </svg>
+          </div>
+        `;
+}
+function reminderNotes() {
+  let htmlContent = '';
+  if(content()){
+    content().forEach(item => {
+      if (item.reminder && !item.archive) {
+        const reminderString = item.reminder;
+        const reminderDate = new Date(reminderString);
+
+        const options = {
+          month: 'short',
+          day: 'numeric',
+          hour: 'numeric',
+          minute: 'numeric',
+        };
+
+        let formattedReminder = reminderDate.toLocaleDateString('en-US', options);
+        const currentDate = new Date();
+
+        const differenceInMilliseconds = reminderDate - currentDate;
+
+        const daysDifference = Math.floor(differenceInMilliseconds / (1000 * 60 * 60 * 24));
+
+        const monthsDifference = Math.floor(differenceInMilliseconds / (1000 * 60 * 60 * 24 * 30.44));
+
+        htmlContent +=
+              `<div class="note-card" 
+                    style="${item.backgroundImage ? `background-image: url('${item.backgroundImage}');` : `background-color: ${item.color};`}"
+                    onclick="clickCardReminder(this)"
+                    noteID="${item.id}">
+
+                    ${item.title ? `<div class="note-title">${item.title}</div>` : ''}
+                    <div class="note-content">
+                        <p>${item.content ? item.content : "Empty Note"}</p>
+                    </div>
+                    ${item.reminder ?`
+                      <div class="note-reminder-container">
+                            <div class="note-reminder ${currentDate > reminderDate?`active`:``
+                      }">
+                        <svg class="menu-svg" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24">
+                          <path d="M160-200v-80h80v-280q0-83 50-147.5T420-792v-28q0-25 17.5-42.5T480-880q25 0 42.5 17.5T540-820v28q80 20 130 84.5T720-560v280h80v80H160Zm320-300Zm0 420q-33 0-56.5-23.5T400-160h160q0 33-23.5 56.5T480-80ZM320-280h320v-280q0-66-47-113t-113-47q-66 0-113 47t-47 113v280Z" fill="black"/>
+                        </svg>
+                        <span>${formattedReminder}</span>
+                        </div> 
+                        <div class="days-left">
+                        ${currentDate < reminderDate?`
+                        <p>${daysDifference} ${daysDifference == 1?"day":"days"} left<p/>`
+                        :
+                        `<p class="markAsDone()">Mark as done</p>`
+                        }
+                        </div>
+                      </div>`
+                      :
+                      ""
+                    }
+                </div>
+              `
       }
-      ${pinnedNotes && unpinNotes?`
-          <p class="label">Others</p>
-          <div class="unpin-notes">
-            <div class="note-card-container" id="pinNotes">
-              ${unpinNotes}
-            </div>
-          </div>`
-        :""
-     }
+  });
+  }  
+  return `
+  ${htmlContent?
+      `<div class="pin-notes">
+        <div class="note-card-container">
+            ${htmlContent}
+        </div>
+      </div>
       <div class="add-note-btn">
         <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24">
           <path d="M440-240h80v-120h120v-80H520v-120h-80v120H320v80h120v120ZM240-80q-33 0-56.5-23.5T160-160v-640q0-33 23.5-56.5T240-880h320l240 240v480q0 33-23.5 56.5T720-80H240Zm280-520v-200H240v640h480v-440H520ZM240-800v200-200 640-640Z"/>
         </svg>
-      </div>
-    `;
+      </div>`
+      :
+      `<div class="no-notes">No notes</div>`
+  }
+`;
 }
-
-function reminderNotes() {
+function archiveNotes() {
   let htmlContent = '';
-  content().forEach(item => {
-    if (item.reminder && !item.archive) {
-      const reminderString = item.reminder;
-
-      const reminderDate = new Date(reminderString);
-
-      const options = {
- 
-        month: 'short',
-        day: 'numeric',
-        hour: 'numeric',
-        minute: 'numeric',
-      };
-
-      let formattedReminder = reminderDate.toLocaleDateString('en-US', options);
-
-      const currentDate = new Date();
-
-      const differenceInMilliseconds = reminderDate - currentDate;
-
-      const daysDifference = Math.floor(differenceInMilliseconds / (1000 * 60 * 60 * 24));
-
-      const monthsDifference = Math.floor(differenceInMilliseconds / (1000 * 60 * 60 * 24 * 30.44));
-
-      console.log(`Formatted Reminder Date: ${formattedReminder}`);
-      console.log(`Days left: ${daysDifference}`);
-      console.log(`Months left: ${monthsDifference}`);
-
-
-      htmlContent +=
-             `<div class="note-card" 
-                   style="${item.backgroundImage ? `background-image: url('${item.backgroundImage}');` : `background-color: ${item.color};`}"
-                   onclick="clickCardReminder(this)"
-                   noteID="${item.id}">
-
-                  ${item.author ? `<div class="note-title">${item.author}</div>` : ''}
+  if(content()){
+    content().forEach(item => {
+      if (item.archive) { // Check if the 'archive' property is not true
+        htmlContent += `
+              <div class="note-card" 
+                  style="${item.backgroundImage ? `background-image: url('${item.backgroundImage}');` : `background-color: ${item.color};`}"
+                  onclick="clickCardArchive(this)"
+                  noteID="${item.id}"
+              >
+                  ${item.title? `<div class="note-title">${item.title}</div>` : ''}
                   <div class="note-content">
                       <p>${item.content ? item.content : "Empty Note"}</p>
                   </div>
-                  ${item.reminder ?`
-                    <div class="note-reminder-container">
-                          <div class="note-reminder ${currentDate > reminderDate?`active`:``
-                     }">
-                      <svg class="menu-svg" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24">
-                        <path d="M160-200v-80h80v-280q0-83 50-147.5T420-792v-28q0-25 17.5-42.5T480-880q25 0 42.5 17.5T540-820v28q80 20 130 84.5T720-560v280h80v80H160Zm320-300Zm0 420q-33 0-56.5-23.5T400-160h160q0 33-23.5 56.5T480-80ZM320-280h320v-280q0-66-47-113t-113-47q-66 0-113 47t-47 113v280Z" fill="black"/>
-                      </svg>
-                      <span>${formattedReminder}</span>
-                      </div> 
-                      <div class="days-left">
-                      ${currentDate < reminderDate?`
-                      <p>${daysDifference} ${daysDifference == 1?"day":"days"} left<p/>`
-                      :
-                      `<p class="markAsDone()">Mark as done</p>`
-                      }
-                      </div>
-                    </div>`
-                    :
-                    ""
-                   }
               </div>
-            `
-    }
-  });
-
-  return `
-    <div class="pin-notes">
-      <div class="note-card-container">
-          ${htmlContent}
-      </div>
-    </div>
-    <div class="add-note-btn">
-      <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24">
-        <path d="M440-240h80v-120h120v-80H520v-120h-80v120H320v80h120v120ZM240-80q-33 0-56.5-23.5T160-160v-640q0-33 23.5-56.5T240-880h320l240 240v480q0 33-23.5 56.5T720-80H240Zm280-520v-200H240v640h480v-440H520ZM240-800v200-200 640-640Z"/>
-      </svg>
-    </div>
-`;
-}
-
-function archiveNotes() {
-  let htmlContent = '';
-  content().forEach(item => {
-    if (item.archive) { // Check if the 'archive' property is not true
-      htmlContent += `
-            <div class="note-card" 
-                 style="${item.backgroundImage ? `background-image: url('${item.backgroundImage}');` : `background-color: ${item.color};`}"
-                 onclick="clickCardArchive(this)"
-                 noteID="${item.id}"
-            >
-                ${item.author ? `<div class="note-title">${item.author}</div>` : ''}
-                <div class="note-content">
-                    <p>${item.content ? item.content : "Empty Note"}</p>
-                </div>
-            </div>
-        `;
-    }
-  });
+          `;
+      }
+    });
+  }
 return `
+  ${htmlContent?`
     <div class="pin-notes">
       <div class="note-card-container">
           ${htmlContent}
       </div>
-    </div>
+    </div>`
+    :
+    `<div class="no-notes">No notes</div>`
+  }
 `;
 
 }
-
 function trashNotes() {
   let htmlContent = '';
-  content().forEach(item => {
-    if (item.delete) { // Check if the 'archive' property is not true
-      htmlContent += `
-            <div class="note-card" 
-                 style="${item.backgroundImage ? `background-image: url('${item.backgroundImage}');` : `background-color: ${item.color};`}"
-                 onclick="clickCardTrash(this)"
-                 noteID="${item.id}"
-            >
-                ${item.author ? `<div class="note-title">${item.author}</div>` : ''}
-                <div class="note-content">
-                    <p>${item.content ? item.content : "Empty Note"}</p>
-                </div>
-            </div>
-        `;
-    }
-  });
-
+  if(content()){
+    content().forEach(item => {
+      if (item.delete) { // Check if the 'archive' property is not true
+        htmlContent += `
+              <div class="note-card" 
+                  style="${item.backgroundImage ? `background-image: url('${item.backgroundImage}');` : `background-color: ${item.color};`}"
+                  onclick="clickCardTrash(this)"
+                  noteID="${item.id}"
+              >
+                  ${item.title ? `<div class="note-title">${item.title}</div>` : ''}
+                  <div class="note-content">
+                      <p>${item.content ? item.content : "Empty Note"}</p>
+                  </div>
+              </div>
+          `;
+      }
+    });
+  }
   return `
-    <p class="label">Delete after 7 days</p>
-    <div class="pin-notes">
-      <div class="note-card-container">
-          ${htmlContent}
+    ${htmlContent?`
+      <p class="label">Delete after 7 days</p>
+      <div class="pin-notes">
+        <div class="note-card-container">
+            ${htmlContent}
+        </div>
       </div>
-    </div>
+      `
+      :
+      `<div class="no-notes">No notes</div>`
+  }
 `;
 }
-
-function content() {
-  const content = [
-    {
-      "id": 1,
-      "author": "Albert Einstein",
-      "content": "Imagination is more important than knowledge.",
-      "color": "",
-      "backgroundImage": "assets/images/background-image-5.png",
-      "archive": true,
-      "delete": false,
-      "reminder": "2023-09-15T08:00:00",
-      "pin": true
-    },
-    {
-      "id": 2,
-      "author": "Mahatma Gandhi",
-      "content": "Be the change that you wish to see in the world.",
-      "color": "#87CEEB",
-      "backgroundImage": "assets/images/background-image-1.png",
-      "archive": false,
-      "delete": false,
-      "reminder": "2023-09-12T14:30:00",
-      "pin": true
-    },
-    {
-      "id": 3,
-      "author": "",
-      "content": "I've learned that people will forget what you said, people will forget what you did, but people will never forget how you made them feel.",
-      "color": "#98FB98",
-      "backgroundImage": "assets/images/background-image-4.png",
-      "archive": false,
-      "delete": false,
-      "reminder": "2023-09-25T10:00:00",
-      "pin": false
-    },
-    {
-      "id": 4,
-      "author": "Martin Luther King Jr.",
-      "content": "Darkness cannot drive out darkness; only light can do that. Hate cannot drive out hate; only love can do that.",
-      "color": "#FFB6C1",
-      "backgroundImage": "",
-      "archive": false,
-      "delete": true,
-      "reminder": "2023-09-30T15:45:00",
-      "pin": false
-    },
-    {
-      "id": 5,
-      "author": "Nelson Mandela",
-      "content": "Education is the most powerful weapon which you can use to change the world.",
-      "color": "#FFA07A",
-      "backgroundImage": "assets/images/background-image-2.png",
-      "archive": false,
-      "delete": false,
-      "reminder": "2023-10-05T12:30:00",
-      "pin": false
-    },
-    {
-      "id": 6,
-      "author": "Steve Jobs",
-      "content": "",
-      "color": "#F0E68C",
-      "backgroundImage": "assets/images/background-image-6.png",
-      "archive": false,
-      "delete": false,
-      "reminder": "2023-10-10T09:15:00",
-      "pin": false
-    },
-    {
-      "id": 7,
-      "author": "Winston Churchill",
-      "content": "Success is not final, failure is not fatal: It is the courage to continue that counts.",
-      "color": "#FFD700",
-      "backgroundImage": "assets/images/background-image-3.png",
-      "archive": false,
-      "delete": false,
-      "reminder": "2023-10-15T17:30:00",
-      "pin": false
-    },
-    {
-      "id": 8,
-      "author": "Marie Curie",
-      "content": "Nothing in life is to be feared, it is only to be understood. Now is the time to understand more, so that we may fear less.",
-      "color": "#87CEEB",
-      "backgroundImage": "assets/images/background-image-6.png",
-      "archive": false,
-      "delete": false,
-      "reminder": "2023-10-20T11:00:00",
-      "pin": false
-    },
-    {
-      "id": 9,
-      "author": "Mark Twain",
-      "content": "The two most important days in your life are the day you are born and the day you find out why.",
-      "color": "#98FB98",
-      "backgroundImage": "assets/images/background-image-2.png",
-      "archive": false,
-      "delete": false,
-      "reminder": "",
-      "pin": false
-    },
-    {
-      "id": 10,
-      "author": "Eleanor Roosevelt",
-      "content": "The future belongs to those who believe in the beauty of their dreams.",
-      "color": "white",
-      "archive": false,
-      "delete": false,
-      "reminder": "2023-11-01T16:20:00",
-      "pin": false
+function closeNoteModal(event){
+  event.preventDefault()
+    const modalContainer = event.target.closest('.modal-container');
+    if (modalContainer) {
+        modalContainer.remove();
     }
-  ];
-  return content;
 }
+function content() {
+  var getNoteData = JSON.parse(localStorage.getItem('note-data'));
+
+  return getNoteData;
+}
+const bodyElement = document.body; 
+
+window.addEventListener("mousemove", function(event) {
+  if (event.target === bodyElement || bodyElement.contains(event.target)) {
+    bodyElement.classList.add("mouse-inside");
+  } else {
+    bodyElement.classList.remove("mouse-inside");
+  }
+});
+
+
+
+
+
+

@@ -34,10 +34,11 @@
     aside .menu-list-container .logo-container-respo{
         display: flex;
         align-items: center;
-        padding-left: 60px;
+        padding-left: 15px;
         justify-content: left;
         font-size: 23px;
         height: 60px;
+        font-family: cursive;
     }
     aside .menu-list-container a{
         width: 100%;
@@ -54,10 +55,10 @@
         margin-left: 0;
     }
     .content-container .note-card-container{
-        margin-right: 56px;
+        margin-right: 42px;
     }
     .modal-content{
-        margin-right: 30px;
+        /* margin-right: 30px; */
     }
     body.mobile .note-card-container{
         margin-right: 42px;

@@ -56,6 +56,7 @@
     outline: none;
 }
 .modal-header button{
+    height: 34px;
     width: 34px;
     border-radius: 50%;
     border: none;
@@ -75,13 +76,18 @@
 }
 .modal-header button span {
     position: absolute;
-    transform: rotate(35deg); /* Adjust the rotation angle to your preference */
+    transform: rotate(35deg); 
     height: 2px;
     width: 1.5rem;
     background-color: black;
     border-radius: 50px;
 }
-
+.modal-header button.add-note span{
+    display: none;
+}
+.modal-header button.add-note.pin span{
+    display: block;
+}
 .modal-body{
     width: 100%;
     height: auto;
@@ -126,6 +132,7 @@
     display: flex;
     gap: 5px;
     margin-left: 15px;
+    position: relative;
 }
 .footer-btn a{
     height: 30px;
@@ -143,11 +150,13 @@
    height: 1.4rem;
    width: 1.4rem;
 }
-
-.footer-btn a ul.reminder{
+.modal-content.add-note .delete{
+    display: none;
+}
+.footer-btn ul.reminder{
     width: auto;
     position: absolute;
-    top: -112px;
+    top: -118px;
     left: 0px;
     z-index: 99999;
     display: none;
@@ -159,12 +168,40 @@
     box-shadow: 0px 0px 1px 1px rgba(0, 0, 0, 0.158);
     border-radius: 5px;
 }
-a ul.reminder li{
-    width: 140px;
-    padding: 10px 0px 10px 20px;
-    color: black;
+.footer-btn ul.reminder.active{
+    display: flex;
 }
-a ul.reminder li:hover{
+ul.reminder li{
+    width: 160px;
+    padding: 10px 0px;
+    display: flex;
+    align-items: center;
+    color: black;
+    position: relative;
+}
+ul.reminder li p{
+    width: 50px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+ul.reminder li input{
+    width: 100px;
+    height: 20px;
+    background-color: transparent;
+    border: none;
+}
+ul.reminder li input::-webkit-calendar-picker-indicator {
+    width: 18px; 
+    height: 18px; 
+    border-radius: 50%; 
+    color: white; 
+  }
+ul.reminder li input:focus{
+    outline: none;
+}
+ul.reminder li:hover{
     background-color: rgba(0, 0, 0, 0.226);
 }
 .footer-btn a.active ul.reminder{
@@ -206,7 +243,7 @@ a .background li.backgroundImage{
     background-size: 100px;
     background-position: center;
 }
-a .background li:hover{
+a .background li:hover,a .background li.active{
     border: 2px black solid;
 }
 .footer-btn a.active .background{
