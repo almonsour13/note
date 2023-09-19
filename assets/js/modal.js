@@ -75,11 +75,23 @@ function colorPalette() {
           '#FFA07A',
           '#FFC0CB'
       ];
-      let palette = ''; 
+      let palette = '';
+      let liClass = 'active'; // Start with 'active' class for the first element
+
       lightColors.forEach(color => {
-          palette += `<li class="color" style="background-color: ${color};" onclick="selectBackground(this)"></li>`;
+    // Add the color and class to the list item
+      palette += `<li class="${liClass} color" style="background-color: ${color};" onclick="selectBackground(this)"></li>`;
+
+    // Toggle the class between 'odd' and 'even' for each iteration
+       liClass = liClass === 'odd' ? 'even' : 'odd';
       });
-      return `<ul class="color-palette">${palette}</ul>`
+
+// Create the <ul> with the generated <li> elements
+      const colorPalette = `<ul class="color-palette">${palette}</ul>`;
+
+// You can return or use 'colorPalette' as needed
+      return colorPalette;
+
 }    
 function backgroundImage(){
       const backgroundImages = [ 
@@ -96,19 +108,6 @@ function backgroundImage(){
       });
       return `<ul class="background-image">${background}</ul>`
 }
-const footerButtons = document.querySelector('.footer-btn a');
-
-footerButtons.forEach(button => {
-    console.log(button)
-//   button.addEventListener('click', function (event) {
-//     event.preventDefault();
-//     alert("")
-//     footerButtons.forEach(otherButton => {
-//       otherButton.classList.remove('active');
-//     });
-//     button.classList.add('active');
- // });
-});
 
 function reminder(element){
     const buttons = document.querySelectorAll('.footer-btn a');
