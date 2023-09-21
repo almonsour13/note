@@ -134,7 +134,7 @@
     margin-left: 15px;
     position: relative;
 }
-.footer-btn a{
+.footer-btn button{
     height: 30px;
     width: 30px;
     border-radius: 50%;
@@ -142,11 +142,14 @@
     justify-content: center;
     align-items: center;
     position: relative;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
 }
-.footer-btn a:hover,.footer-btn a.active {
+.footer-btn button:hover,.footer-btn button.active {
     background-color: rgba(0, 0, 0, 0.226);
 }
-.footer-btn a svg{
+.footer-btn button svg{
    height: 1.4rem;
    width: 1.4rem;
 }
@@ -204,10 +207,10 @@ ul.reminder li input:focus{
 ul.reminder li:hover{
     background-color: rgba(0, 0, 0, 0.226);
 }
-.footer-btn a.active ul.reminder{
+.footer-btn button.active ul.reminder{
     display: flex;
 }
-.footer-btn a .background{
+.footer-btn button .background{
     width: auto;
     position: absolute;
     top: -109px;
@@ -220,36 +223,89 @@ ul.reminder li:hover{
     list-style: none;
     flex-direction: column;
 }
-a .background ul{
+button .background ul{
     display: flex;
     list-style: none;
     gap: 5px;
 } 
-a .background .color-palette{
+button .background .color-palette{
     padding: 10px 10px 5px 10px;
     border-bottom: 1px  rgba(0, 0, 0, 0.158) solid;
 }
-a .background .background-image{
+button .background .background-image{
     padding: 10px 10px 10px 10px;
 }
-a .background li{
+button .background li{
     height: 30px;
     width: 30px;
     border-radius: 50%;
     border: 2px transparent solid;
 }
-a .background li.backgroundImage{
+button .background li.backgroundImage{
     background-repeat: no-repeat;
     background-size: 100px;
     background-position: center;
 }
-a .background li:hover,a .background li.active{
+button .background li:hover,a .background li.active{
     border: 2px black solid;
 }
-.footer-btn a.active .background{
+.footer-btn button.active .background{
     display: flex;
 }
 .modal-footer .close-btn{
     margin-right: 20px;
     cursor: pointer;
+}
+.modal-prompt, .modal-prompt-2{
+    width: 20rem;
+    height: 3rem;
+    position: absolute;
+    bottom: 0;
+    margin: 15px;
+    z-index: 9999999;
+    background-color: rgb(48, 47, 48);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-radius: 5px;
+    padding: 0px 10px 0px 10px;
+    transition: 0.5s;
+    transform: translateX(-360px);
+    box-shadow: 0px 0px 5px 1px rgba(24, 24, 24, 0.288);
+}
+.modal-prompt p, .modal-prompt-2 p{
+    font-size: 1rem;
+    color: rgb(206, 206, 206);
+}
+.modal-prompt .button{
+    height: 2rem;
+    width: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 1rem;
+    line-height: 1rem;
+    border-radius: 50%;
+    color: rgb(206, 206, 206);
+}
+.modal-prompt-2 .button{
+    height: 2rem;
+    width: 6rem;
+    background-color: transparent;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 1rem;
+    line-height: 1rem;
+    color: rgb(206, 206, 206);
+    border-radius: 5px;
+}
+.modal-prompt .button:hover,.button-open:hover{
+    background-color: rgb(77, 77, 77);
+}
+.modal-prompt.active, .modal-prompt-2.active{
+    transform: translateX(0px);
 }
