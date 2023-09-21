@@ -257,9 +257,10 @@ button .background li:hover,a .background li.active{
     cursor: pointer;
 }
 .modal-prompt, .modal-prompt-2{
-    width: 20rem;
+    min-width: 300px;
+    width: auto;
     height: 3rem;
-    position: absolute;
+    position: fixed;
     bottom: 0;
     margin: 15px;
     z-index: 9999999;
