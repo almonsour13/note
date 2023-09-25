@@ -75,7 +75,8 @@ function changeMenuListActive(activeClass) {
 
 }
 
-function handleRoute(route) {
+function handleRoute() {
+  const route = window.location.hash.slice(1) || '/';
   const contentDiv = document.querySelector('.content-container');
 
   const pageMapping = {
@@ -95,17 +96,19 @@ function handleRoute(route) {
   document.querySelector('aside').classList.remove("active")
 }
 window.addEventListener('hashchange', function(){
-  const route = window.location.hash.slice(1) || '/';
-  handleRoute(route)
+  handleRoute()
+  initializeAllMasonry()
+  setupEventListeners()
 });
-handleRoute("/");
+handleRoute();
 
 function notes() {
+  //notifSound()
   let pinnedNotes = '';
   let unpinNotes = '';
   if(content()){
     content().forEach(item => {
-      if (!item.archive && !item.delete) {
+      if (!item.archive && !item.delete && !item.done) {
         
         const reminderString = item.reminder;
         const reminderDate = new Date(reminderString);
@@ -169,8 +172,7 @@ function notes() {
     });
   }
   return `
-          ${pinnedNotes && !unpinNotes || !pinnedNotes && unpinNotes || !pinnedNotes && unpinNotes? (
-            (pinnedNotes ? `
+            ${pinnedNotes && unpinNotes || pinnedNotes && !unpinNotes? `
               <p class="label">Pinned</p>
               <div class="pin-notes">
                 <div class="note-card-container" id="pinNotes">
@@ -178,16 +180,19 @@ function notes() {
                 </div>
               </div>`
               : ''
-            ) +
-            (unpinNotes ? (
-              (pinnedNotes ? `<p class="label">Others</p>` : '') +
-              `<div class="unpin-notes">
+            } 
+            ${pinnedNotes && unpinNotes || !pinnedNotes && unpinNotes?
+              `
+              ${pinnedNotes ? `<p class="label">Others</p>` : ''}
+              <div class="unpin-notes">
                 <div class="note-card-container" id="pinNotes">
                   ${unpinNotes}
                 </div>
               </div>`
-            ) : "")
-          ) : '<div class="no-notes">No note</>'}
+             : ""
+            }
+            
+          ${!pinnedNotes && !unpinNotes?'<div class="no-notes">No note</>':''}
           <div class="add-note-btn">
             <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24">
               <path d="M440-240h80v-120h120v-80H520v-120h-80v120H320v80h120v120ZM240-80q-33 0-56.5-23.5T160-160v-640q0-33 23.5-56.5T240-880h320l240 240v480q0 33-23.5 56.5T720-80H240Zm280-520v-200H240v640h480v-440H520ZM240-800v200-200 640-640Z"/>
@@ -208,7 +213,7 @@ function reminderNotes() {
     });
 
     notes.forEach(item => {
-      if (item.reminder && !item.archive && !item.delete) {
+      if (item.reminder && !item.archive && !item.delete && !item.done) {
         const reminderString = item.reminder;
         const reminderDate = new Date(reminderString);
 
@@ -281,7 +286,7 @@ function archiveNotes() {
   let htmlContent = '';
   if(content()){
     content().forEach(item => {
-      if (item.archive && !item.delete) { // Check if the 'archive' property is not true
+      if (item.archive && !item.delete && !item.done) { // Check if the 'archive' property is not true
         htmlContent += `
               <div class="note-card" 
                   style="${item.backgroundImage ? `background-image: url('${item.backgroundImage}');` : `background-color: ${item.color};`}"
@@ -314,25 +319,36 @@ function trashNotes() {
   let htmlContent = '';
   if(content()){
     content().forEach(item => {
-      if (item.delete) { 
+      if (item.delete && !item.done) { 
         const reminderString = item.deleteDate;
-        const reminderDate = new Date(reminderString);
+        const parts = reminderString.split(/[\s,:]+/);
 
-        const options = {
-          month: 'short',
-          day: 'numeric',
-          hour: 'numeric',
-          minute: 'numeric',
-        };
+      const month = parts[0];
+      const day = parseInt(parts[1], 10);
+      const year = parseInt(parts[2], 10);
+      const hour = parseInt(parts[3], 10);
+      const minute = parseInt(parts[4], 10);
+      const amPm = parts[5];
 
-        let formattedReminder = reminderDate.toLocaleDateString('en-US', options);
-        const currentDate = new Date();
+      const monthIndex = new Date(Date.parse(month + " 1, 2000")).getMonth();
 
-        const differenceInMilliseconds = reminderDate - currentDate;
+      // Create a new Date object
+      const reminderDate = new Date(year, monthIndex, day, hour, minute);
 
-        const daysDifference = Math.floor(differenceInMilliseconds / (1000 * 60 * 60 * 24));
+      // Adjust for AM/PM
+      if (amPm === "PM" && hour < 12) {
+        reminderDate.setHours(reminderDate.getHours() + 12);
+      }
 
-        const monthsDifference = Math.floor(differenceInMilliseconds / (1000 * 60 * 60 * 24 * 30.44));
+      const currentDate = new Date();
+      const differenceInMilliseconds = Math.abs(reminderDate - currentDate);
+
+      const millisecondsPerDay = 1000 * 60 * 60 * 24;
+      const millisecondsPerMonth = millisecondsPerDay * 30.44;
+
+      const daysDifference = Math.floor(differenceInMilliseconds / millisecondsPerDay);
+
+
         htmlContent += `
               <div class="note-card" 
                   style="${item.backgroundImage ? `background-image: url('${item.backgroundImage}');` : `background-color: ${item.color};`}"
@@ -374,7 +390,7 @@ function closeModal(event) {
       modalContainer.remove();
       modalPrompt("Note Added")
   }
-  callPage();
+  handleRoute();
 }
 function closeNoteModal(event){
   event.preventDefault()
@@ -403,9 +419,8 @@ function closeNoteModal(event){
         archive: false,
         delete: false,
         reminder: convertDateTime()?convertDateTime():"",
-        pin: pinBtn.getAttribute("show")? true:false
+        pin: pinBtn.getAttribute("show")=="true"?true:false
       };
-
       var getNoteData = JSON.parse(localStorage.getItem('note-data'));
       const newArray = [];
       getNoteData.forEach(data => {
@@ -418,7 +433,7 @@ function closeNoteModal(event){
       modalPrompt("Note Updated")
       localStorage.setItem("note-data", JSON.stringify(newArray));
       modalContainer.remove();
-      callPage();
+      handleRoute()
     }
 }
 function closeArchiveModal(event){
@@ -462,14 +477,14 @@ function closeArchiveModal(event){
       });
       localStorage.setItem("note-data", JSON.stringify(newArray));
       modalContainer.remove();
-      callPage();
+      handleRoute()
     }
 }
 function closeTrashModal(event){
   event.preventDefault()
   const modalContainer = event.target.closest('.modal-container');
   modalContainer.remove();
-  callPage();
+  handleRoute()
 }
 function archive(event, noteID){
   var getNoteData = JSON.parse(localStorage.getItem('note-data'));
@@ -479,10 +494,9 @@ function archive(event, noteID){
       data.archive = true;
     }
   });
-  console.log(getNoteData)
   localStorage.setItem('note-data', JSON.stringify(getNoteData));
   event.target.closest('.modal-container').remove();
-  callPage();
+  handleRoute()
   modalPrompt("Note move to archived")
 }
 function unArchive(event, noteID){
@@ -496,7 +510,7 @@ function unArchive(event, noteID){
   modalPrompt("Note Unarchived")
   localStorage.setItem('note-data', JSON.stringify(getNoteData));
   event.target.closest('.modal-container').remove();
-  callPage();
+  handleRoute()
 }
 function deleteBtn(event, noteID) {
   var getNoteData = JSON.parse(localStorage.getItem('note-data'));
@@ -517,7 +531,7 @@ function deleteBtn(event, noteID) {
   const amOrPm = hours < 12 ? amPm[0] : amPm[1];
   
   const formattedDate = `${months[monthIndex]} ${day+7}, ${year}, ${hours % 12}:${minutes < 10 ? '0' : ''}${minutes} ${amOrPm}`;
-  
+  console.log(formattedDate)
   getNoteData.forEach(data => {
     if (parseInt(data.id) === noteID) {
       data.delete = true;
@@ -528,7 +542,7 @@ function deleteBtn(event, noteID) {
   modalPrompt("Note Move to Trash");
   localStorage.setItem('note-data', JSON.stringify(getNoteData));
   event.target.closest('.modal-container').remove();
-  callPage();
+  handleRoute()
 }
 function restoreBtn(event, noteID){
   var getNoteData = JSON.parse(localStorage.getItem('note-data'));
@@ -541,7 +555,7 @@ function restoreBtn(event, noteID){
   modalPrompt("Note Restored")
   localStorage.setItem('note-data', JSON.stringify(getNoteData));
   event.target.closest('.modal-container').remove();
-  callPage();
+  handleRoute()
 }
 function deletefvr(event, noteID){
   var getNoteData = JSON.parse(localStorage.getItem('note-data'));
@@ -555,10 +569,24 @@ function deletefvr(event, noteID){
   modalPrompt("Note Deleted")
   localStorage.setItem('note-data', JSON.stringify(newArray));
   event.target.closest('.modal-container').remove();
-  callPage();
+  handleRoute()
 }
-
+function markAsDone(event, noteID){
+  var getNoteData = JSON.parse(localStorage.getItem('note-data'));
+  getNoteData.forEach(data => {
+    if (parseInt(data.id) === noteID) {
+      data.delete = true;
+      data.done = true;
+    }
+  });
+  
+  modalPrompt("Note mark as done");
+  localStorage.setItem('note-data', JSON.stringify(getNoteData));
+  event.target.closest('.modal-container').remove();
+  handleRoute()
+}
 function modalPrompt(message) {
+  promptSound();
   const modalPromptM = document.querySelector(".modal-prompt");
   const pTag = modalPromptM.querySelector("p");
 
@@ -569,19 +597,15 @@ function modalPrompt(message) {
     modalPromptM.classList.remove("active");
   }, 5000); 
 }
+async function promptSound(){
+  const sound = new Howl({
+    src: ['assets/sounds/mixkit-doorbell-tone-2864.wav']
+  });
 
+  sound.play();
+}
 function closePromptModal(event){
   event.target.closest(".modal-prompt").remove();
-}
-function callPage(){
- notes()
- archiveNotes()
- reminderNotes();
- trashNotes()
- const route = window.location.hash.slice(1) || '/';
- handleRoute(route)
- setupEventListeners();
- initializeAllMasonry();
 }
 
 function content() {
@@ -597,6 +621,14 @@ window.addEventListener("mousemove", function(event) {
     bodyElement.classList.remove("mouse-inside");
   }
 });
+window.addEventListener("click",  function(){
+  handleRoute()
+  setupEventListeners()
+});
+document.addEventListener("click",  function(){
+  handleRoute()
+  setupEventListeners()
+});
 
 
 // Function to display a push notification
@@ -606,7 +638,6 @@ function showNotification(message) {
   }
 }
 
-// Create a Set to keep track of items with notifications already shown
 const notifiedItems = new Set();
 
 setInterval(() => {
@@ -636,8 +667,8 @@ setInterval(() => {
     });
   }
 }, 1000);
-
 function showCardNotif(noteID, reminder) {
+  notifSound();
   const dateString = reminder;
   const date = new Date(dateString);
 
@@ -662,26 +693,29 @@ function showCardNotif(noteID, reminder) {
 
   modalPromptM.appendChild(clickNoteButton);
 
-  pTag.textContent = "Today,"+timeString;
-console.log(timeString)
+  pTag.textContent = "Today, "+timeString;
+  console.log(timeString)
   modalPromptM.classList.add("active");
 
   setTimeout(() => {
     modalPromptM.classList.remove("active");
   }, 5000);
 }
+async function notifSound(){
+  const sound = new Howl({
+    src: ['assets/sounds/mixkit-clear-announce-tones-2861.wav']
+  });
 
-
-function openReminderNote(event, noteID){
-  handleRoute("/reminder");
+  sound.play();
+}
+function openReminderNote(event, noteID) {
+  window.location.href = 'index.html#/reminder';
   setTimeout(() => {
-    clickCard(noteID)
+      clickCard(noteID);
   }, 1000);
   event.target.closest(".modal-prompt-2").remove();
 }
-setInterval(() => {
-  
-}, 1000);
+
 
 
 

@@ -81,11 +81,9 @@
     width: 1.5rem;
     background-color: black;
     border-radius: 50px;
-}
-.modal-header button.add-note span{
     display: none;
 }
-.modal-header button.add-note.pin span{
+.modal-header .pin-btn.pin span{
     display: block;
 }
 .modal-body{
@@ -309,4 +307,19 @@ button .background li:hover,a .background li.active{
 }
 .modal-prompt.active, .modal-prompt-2.active{
     transform: translateX(0px);
+}
+.mark-as-done{
+    color: green;
+    cursor: pointer;
+    height: auto;
+    width: fit-content;
+    display: flex;
+    border-radius: 10px;
+    align-items: center;
+    background-color: rgba(17, 17, 17, 0.13);
+    padding:5px 10px;
+}
+.mark-as-done:hover{
+    background-color: rgba(0, 0, 0, 0.158);
+    border-radius: 5px;
 }

@@ -17,3 +17,4 @@ window.addEventListener('DOMContentLoaded', initializeAllMasonry);
 window.addEventListener('load', initializeAllMasonry);
 window.addEventListener('resize', initializeAllMasonry);
 window.addEventListener('hashchange', initializeAllMasonry);
+window.addEventListener('click', initializeAllMasonry);
