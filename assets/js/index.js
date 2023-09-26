@@ -656,6 +656,7 @@ function modalPrompt(message) {
     }, 5000);
   }, 100);
   intervals()
+  initializeAllMasonry()
 }
 async function promptSound(){
   const sound = new Howl({
@@ -758,6 +759,7 @@ function showCardNotif(noteID, reminder) {
     modalPromptM.classList.remove("active");
   }, 5000);
   intervals()
+  initializeAllMasonry()
 }
 function intervals() {
   var intervs = setInterval(() => {
