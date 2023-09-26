@@ -91,6 +91,7 @@ nav .logo-container{
     height: 30px;
     width: 30px;
     margin-right: 5px;
+    border-radius: 50%;
 }
 nav .logo-container.home{
     /* font-family:; */

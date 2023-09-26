@@ -62,7 +62,7 @@ function changeMenuListActive(activeClass) {
   const pageTitle = document.querySelector('.logo-container');
   pageTitle.classList.remove("home");
   if (activeClass === "/") {
-    pageTitle.innerHTML = '<img src="assets/images/logo/logo-yellow.png" alt="logo">MemoMagic';
+    pageTitle.innerHTML = '<img class="logo-image" src="assets/images/logo/logo-yellow-1.png" alt="logo">Memo Magic';
     pageTitle.classList.add("home");
   } else if (activeClass === "/tasks") {
     pageTitle.textContent = "Tasks";
@@ -648,6 +648,7 @@ function modalPrompt(message) {
       }, 300);
     }, 5000);
   }, 100);
+  intervals()
 }
 async function promptSound(){
   const sound = new Howl({
@@ -722,7 +723,6 @@ setInterval(() => {
         }
       }
     });
-    handleRoute();
   }
 }, 1000);
 function showCardNotif(noteID, reminder) {
@@ -741,7 +741,7 @@ function showCardNotif(noteID, reminder) {
  
   const modalPromptM = document.querySelector(".modal-prompt-2"); 
 
-  const clickNoteButton = `<p>${"today, " + timeString}</p><div class="button-open" onclick="openReminderNote(event, ${noteID})">Open note</div>`; // Create an HTML string for the button
+  const clickNoteButton = `<p>${"Today, " + timeString}</p><div class="button-open" onclick="openReminderNote(event, ${noteID})">Open note</div>`; // Create an HTML string for the button
   
   modalPromptM.innerHTML = clickNoteButton;
   
@@ -750,6 +750,18 @@ function showCardNotif(noteID, reminder) {
   setTimeout(() => {
     modalPromptM.classList.remove("active");
   }, 5000);
+  intervals()
+}
+function intervals() {
+  var intervs = setInterval(() => {
+      handleRoute();
+    }, 1000);
+
+  // Move clearInterval outside the setTimeout block
+  setTimeout(() => {
+    console.log("Asd")
+    clearInterval(intervs);
+  }, 5000); // This cancels the interval after 15 seconds (5-second delay + 10 seconds of running)
 }
 async function notifSound(){
   const sound = new Howl({
