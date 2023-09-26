@@ -137,14 +137,22 @@ function notes() {
                     <div class="note-content">
                         ${item.content ? `<p>${itemContent}</p>` : `<p class="empty-note">Empty Note</p>`}
                     </div>
-                    ${item.reminder ?`
-                      <div class="note-reminder ${currentDate > reminderDate?`active`:``
-                      }">
-                        <svg class="menu-svg" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24">
-                            <path d="M160-200v-80h80v-280q0-83 50-147.5T420-792v-28q0-25 17.5-42.5T480-880q25 0 42.5 17.5T540-820v28q80 20 130 84.5T720-560v280h80v80H160Zm320-300Zm0 420q-33 0-56.5-23.5T400-160h160q0 33-23.5 56.5T480-80ZM320-280h320v-280q0-66-47-113t-113-47q-66 0-113 47t-47 113v280Z" fill="black"/>
-                        </svg>
-                        <span>${formattedReminder}</span>
-                      </div>`
+                    ${item.reminder ?
+                      `<div class="note-reminder-container">
+                          <div class="note-reminder ${currentDate > reminderDate ? 'active' : ''}">
+                            <svg class="menu-svg" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24">
+                              <path d="M160-200v-80h80v-280q0-83 50-147.5T420-792v-28q0-25 17.5-42.5T480-880q25 0 42.5 17.5T540-820v28q80 20 130 84.5T720-560v280h80v80H160Zm320-300Zm0 420q-33 0-56.5-23.5T400-160h160q0 33-23.5 56.5T480-80ZM320-280h320v-280q0-66-47-113t-113-47q-66 0-113 47t-47 113v280Z" fill="black"/>
+                            </svg>
+                            <span>${formattedReminder}</span>
+                          </div> 
+                          <div class="days-left">
+                            ${currentDate < reminderDate ?
+                              ``
+                              :
+                              `<p class="mark-as-done" onclick="markAsDone(event, ${item.id}) ">Mark as done</p>`
+                            }
+                          </div>
+                        </div>`
                       :
                       ""
                     }
@@ -160,13 +168,22 @@ function notes() {
                   <div class="note-content">
                       ${item.content ? `<p>${itemContent}</p>` : `<p class="empty-note">Empty Note</p>`}
                   </div>
-                  ${item.reminder ?`
-                  <div class="note-reminder ${currentDate > reminderDate?`active`:``                       }">
-                      <svg class="menu-svg" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24">
-                          <path d="M160-200v-80h80v-280q0-83 50-147.5T420-792v-28q0-25 17.5-42.5T480-880q25 0 42.5 17.5T540-820v28q80 20 130 84.5T720-560v280h80v80H160Zm320-300Zm0 420q-33 0-56.5-23.5T400-160h160q0 33-23.5 56.5T480-80ZM320-280h320v-280q0-66-47-113t-113-47q-66 0-113 47t-47 113v280Z" fill="black"/>
-                      </svg>
-                      <span>${formattedReminder}</span>
-                    </div>`
+                  ${item.reminder ?
+                    `<div class="note-reminder-container">
+                        <div class="note-reminder ${currentDate > reminderDate ? 'active' : ''}">
+                          <svg class="menu-svg" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24">
+                            <path d="M160-200v-80h80v-280q0-83 50-147.5T420-792v-28q0-25 17.5-42.5T480-880q25 0 42.5 17.5T540-820v28q80 20 130 84.5T720-560v280h80v80H160Zm320-300Zm0 420q-33 0-56.5-23.5T400-160h160q0 33-23.5 56.5T480-80ZM320-280h320v-280q0-66-47-113t-113-47q-66 0-113 47t-47 113v280Z" fill="black"/>
+                          </svg>
+                          <span>${formattedReminder}</span>
+                        </div> 
+                        <div class="days-left">
+                          ${currentDate < reminderDate ?
+                            ``
+                            :
+                            `<p class="mark-as-done" onclick="markAsDone(event, ${item.id}) ">Mark as done</p>`
+                          }
+                        </div>
+                      </div>`
                     :
                     ""
                   }
@@ -251,17 +268,22 @@ function reminderNotes() {
             </div>
             ${item.reminder ?
               `<div class="note-reminder-container">
-                  <div class="note-reminder ${currentDate > reminderDate ? 'active' : ''}">
-                    <svg class="menu-svg" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24">
-                      <path d="M160-200v-80h80v-280q0-83 50-147.5T420-792v-28q0-25 17.5-42.5T480-880q25 0 42.5 17.5T540-820v28q80 20 130 84.5T720-560v280h80v80H160Zm320-300Zm0 420q-33 0-56.5-23.5T400-160h160q0 33-23.5 56.5T480-80ZM320-280h320v-280q0-66-47-113t-113-47q-66 0-113 47t-47 113v280Z" fill="black"/>
-                    </svg>
-                    <span>${formattedReminder}</span>
-                  </div> 
+                  <div class="reminder-days">
+                    <div class="note-reminder ${currentDate > reminderDate ? 'active' : ''}">
+                      <svg class="menu-svg" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24">
+                        <path d="M160-200v-80h80v-280q0-83 50-147.5T420-792v-28q0-25 17.5-42.5T480-880q25 0 42.5 17.5T540-820v28q80 20 130 84.5T720-560v280h80v80H160Zm320-300Zm0 420q-33 0-56.5-23.5T400-160h160q0 33-23.5 56.5T480-80ZM320-280h320v-280q0-66-47-113t-113-47q-66 0-113 47t-47 113v280Z" fill="black"/>
+                      </svg>
+                      <span>${formattedReminder}</span>
+                    </div> 
+                    ${currentDate < reminderDate?
+                      `<p>${daysDifference} ${daysDifference > 1 ? "days" : "day"} left<p/>`:''
+                    }
+                  </div>
                   <div class="days-left">
                     ${currentDate < reminderDate ?
-                      `<p>${daysDifference} ${daysDifference == 1 ? "day" : "days"} left<p/>`
+                      ``
                       :
-                      `<p class="markAsDone()">Mark as done</p>`
+                      `<p class="mark-as-done" onclick="markAsDone(event, ${item.id}) ">Mark as done</p>`
                     }
                   </div>
                 </div>`
@@ -587,6 +609,7 @@ function deletefvr(event, noteID){
   handleRoute()
 }
 function markAsDone(event, noteID){
+  event.stopPropagation();
   var getNoteData = JSON.parse(localStorage.getItem('note-data'));
   getNoteData.forEach(data => {
     if (parseInt(data.id) === noteID) {
@@ -597,7 +620,9 @@ function markAsDone(event, noteID){
   
   modalPrompt("Note mark as done");
   localStorage.setItem('note-data', JSON.stringify(getNoteData));
-  event.target.closest('.modal-container').remove();
+  if(event.target.closest('.modal-container')){
+    event.target.closest('.modal-container').remove();
+  }
   handleRoute()
 }
 function modalPrompt(message) {
@@ -619,6 +644,7 @@ function modalPrompt(message) {
     setTimeout(() => {
       setTimeout(() => {
         modalPromptElement.classList.remove('active');
+        modalPromptElement.remove;
       }, 300);
     }, 5000);
   }, 100);
@@ -675,6 +701,7 @@ setInterval(() => {
           showNotification(`Item with a deadline right now: ${reminderString}`);
           showCardNotif(item.id, reminderString);
           notifiedItems.add(item.id);
+          handleRoute()
           console.log(notifiedItems)
         } else if (
           reminderDate.getTime() === currentDate.getTime() + 24 * 60 * 60 * 1000 &&
@@ -682,7 +709,7 @@ setInterval(() => {
         ) {
           console.log(`Item with a deadline tomorrow at the same time: ${reminderString}`);
           showNotification(`Item with a deadline tomorrow at the same time: ${reminderString}`);
-
+          handleRoute()
           notifiedItems.add(item.id);
         }
       }
@@ -703,26 +730,17 @@ function showCardNotif(noteID, reminder) {
   const timeString = date.toLocaleTimeString('en-US', options);
 
  
- const modalPromptM = document.querySelector(".modal-prompt-2");
-  const pTag = modalPromptM.querySelector("p");
+  const modalPromptM = document.querySelector(".modal-prompt-2"); 
 
-  const clickNoteButton = document.createElement("div");
-  clickNoteButton.classList.add("button", "open");
-  clickNoteButton.textContent = "Open-Note";
-  clickNoteButton.onclick = function () {
-    openReminderNote(event, noteID);
-  };
-
-  modalPromptM.appendChild(clickNoteButton);
-
-  pTag.textContent = "Today, "+timeString;
-  console.log(timeString)
+  const clickNoteButton = `<p>${"today, " + timeString}</p><div class="button-open" onclick="openReminderNote(event, ${noteID})">Open note</div>`; // Create an HTML string for the button
+  
+  modalPromptM.innerHTML = clickNoteButton;
+  
   modalPromptM.classList.add("active");
 
   setTimeout(() => {
     modalPromptM.classList.remove("active");
   }, 5000);
-  handleRoute()
 }
 async function notifSound(){
   const sound = new Howl({

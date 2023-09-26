@@ -291,7 +291,7 @@ button .background li:hover,a .background li.active{
     border-radius: 50%;
     color: rgb(206, 206, 206);
 }
-.modal-prompt-2 .button{
+.modal-prompt-2 .button-open{
     height: 2rem;
     width: 6rem;
     background-color: transparent;

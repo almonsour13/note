@@ -58,6 +58,16 @@
   height: auto;
   width:100%;
 }
+.reminder-days{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+.reminder-days p{
+    font-size: 12px;
+
+}
 .note-reminder{
     height: auto;
     width: fit-content;
