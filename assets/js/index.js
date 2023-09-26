@@ -1,4 +1,3 @@
-
 const notifiedItems = new Set();
 
 let modalCount = 0;
@@ -114,7 +113,9 @@ function notes() {
         for (let index = 0; index < 500; index++) {
             itemContent += item.content.charAt(index);
         }
-        itemContent += '...';
+        if(item.content.length >= 500){
+          itemContent += '...';
+        }
         const reminderString = item.reminder;
         const reminderDate = new Date(reminderString);
 
@@ -256,7 +257,9 @@ function reminderNotes() {
         for (let index = 0; index < 500; index++) {
             itemContent += item.content.charAt(index);
         }
-        itemContent += '...';
+        if(item.content.length >= 500){
+          itemContent += '...';
+        }
         htmlContent += `
           <div class="note-card" 
             style="${item.backgroundImage ? `background-image: url('${item.backgroundImage}');` : `background-color: ${item.color};`}"
@@ -317,7 +320,9 @@ function archiveNotes() {
         for (let index = 0; index < 500; index++) {
             itemContent += item.content.charAt(index);
         }
-        itemContent += '...';
+        if(item.content.length >= 500){
+          itemContent += '...';
+        }
         htmlContent += `
               <div class="note-card" 
                   style="${item.backgroundImage ? `background-image: url('${item.backgroundImage}');` : `background-color: ${item.color};`}"
@@ -382,7 +387,9 @@ function trashNotes() {
         for (let index = 0; index < 500; index++) {
             itemContent += item.content.charAt(index);
         }
-        itemContent += '...';
+        if(item.content.length >= 500){
+          itemContent += '...';
+        }
 
         htmlContent += `
               <div class="note-card" 
