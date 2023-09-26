@@ -1,3 +1,6 @@
+
+const notifiedItems = new Set();
+
 function isMobileDevice() {
   const mobileKeywords = /Android|webOS|iPhone|iPad|iPod|BlackBerry|Windows Phone|iOS/i;
   const userAgent = navigator.userAgent;
@@ -8,19 +11,15 @@ function isMobileDevice() {
     document.body.classList.remove("mobile");
   }
 }
-
 isMobileDevice();
 window.addEventListener("resize", isMobileDevice);
 
 function menuButton(element) {
-  if (element.classList.contains("active")) {
-    element.classList.remove("active");
-    document.querySelector('aside').classList.remove("active");
-  } else {
-    element.classList.add("active");
-    document.querySelector('aside').classList.add("active");
-  }
+  const aside = document.querySelector('aside');
+ // element.classList.toggle("active");
+  aside.classList.toggle("active");
 }
+
 
 function closeMenuButton() {
   const aside = document.querySelector('aside');
@@ -61,7 +60,7 @@ function changeMenuListActive(activeClass) {
   const pageTitle = document.querySelector('.logo-container');
   pageTitle.classList.remove("home");
   if (activeClass === "/") {
-    pageTitle.textContent = "MemoMagic";
+    pageTitle.innerHTML = '<img src="assets/images/logo/logo-yellow.png" alt="logo">MemoMagic';
     pageTitle.classList.add("home");
   } else if (activeClass === "/tasks") {
     pageTitle.textContent = "Tasks";
@@ -94,6 +93,7 @@ function handleRoute() {
   }
   document.querySelector('.menu-button').classList.remove("active")
   document.querySelector('aside').classList.remove("active")
+  setupEventListeners();
 }
 window.addEventListener('hashchange', function(){
   handleRoute()
@@ -109,7 +109,11 @@ function notes() {
   if(content()){
     content().forEach(item => {
       if (!item.archive && !item.delete && !item.done) {
-        
+        let itemContent ='';
+        for (let index = 0; index < 500; index++) {
+            itemContent += item.content.charAt(index);
+        }
+        itemContent += '...';
         const reminderString = item.reminder;
         const reminderDate = new Date(reminderString);
 
@@ -130,7 +134,7 @@ function notes() {
                     noteID="${item.id}">
                     ${item.title ? `<div class="note-title">${item.title}</div>` : ''}
                     <div class="note-content">
-                        <p>${item.content ? item.content : "Empty Note"}</p>
+                        ${item.content ? `<p>${itemContent}</p>` : `<p class="empty-note">Empty Note</p>`}
                     </div>
                     ${item.reminder ?`
                       <div class="note-reminder ${currentDate > reminderDate?`active`:``
@@ -153,7 +157,7 @@ function notes() {
                   noteID="${item.id}">
                   ${item.title ? `<div class="note-title">${item.title}</div>` : ''}
                   <div class="note-content">
-                      ${item.content ? `<p>${item.content}</p>` : `<p class="empty-note">Empty Note</p>`}
+                      ${item.content ? `<p>${itemContent}</p>` : `<p class="empty-note">Empty Note</p>`}
                   </div>
                   ${item.reminder ?`
                   <div class="note-reminder ${currentDate > reminderDate?`active`:``                       }">
@@ -230,7 +234,11 @@ function reminderNotes() {
         const differenceInMilliseconds = reminderDate - currentDate;
 
         const daysDifference = Math.floor(differenceInMilliseconds / (1000 * 60 * 60 * 24));
-
+        let itemContent ='';
+        for (let index = 0; index < 500; index++) {
+            itemContent += item.content.charAt(index);
+        }
+        itemContent += '...';
         htmlContent += `
           <div class="note-card" 
             style="${item.backgroundImage ? `background-image: url('${item.backgroundImage}');` : `background-color: ${item.color};`}"
@@ -238,7 +246,7 @@ function reminderNotes() {
             noteID="${item.id}">
             ${item.title ? `<div class="note-title">${item.title}</div>` : ''}
             <div class="note-content">
-                <p>${item.content ? item.content : "Empty Note"}</p>
+                ${item.content ? `<p>${itemContent}</p>` : `<p class="empty-note">Empty Note</p>`}
             </div>
             ${item.reminder ?
               `<div class="note-reminder-container">
@@ -271,11 +279,6 @@ function reminderNotes() {
         <div class="note-card-container">
           ${htmlContent}
         </div>
-      </div>
-      <div class="add-note-btn">
-        <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24">
-          <path d="M440-240h80v-120h120v-80H520v-120h-80v120H320v80h120v120ZM240-80q-33 0-56.5-23.5T160-160v-640q0-33 23.5-56.5T240-880h320l240 240v480q0 33-23.5 56.5T720-80H240Zm280-520v-200H240v640h480v-440H520ZM240-800v200-200 640-640Z"/>
-        </svg>
       </div>`
       :
       `<div class="no-notes">No Reminder Note</div>`
@@ -286,7 +289,12 @@ function archiveNotes() {
   let htmlContent = '';
   if(content()){
     content().forEach(item => {
-      if (item.archive && !item.delete && !item.done) { // Check if the 'archive' property is not true
+      if (item.archive && !item.delete && !item.done) {
+        let itemContent ='';
+        for (let index = 0; index < 500; index++) {
+            itemContent += item.content.charAt(index);
+        }
+        itemContent += '...';
         htmlContent += `
               <div class="note-card" 
                   style="${item.backgroundImage ? `background-image: url('${item.backgroundImage}');` : `background-color: ${item.color};`}"
@@ -295,7 +303,7 @@ function archiveNotes() {
               >
                   ${item.title? `<div class="note-title">${item.title}</div>` : ''}
                   <div class="note-content">
-                      <p>${item.content ? item.content : "Empty Note"}</p>
+                      ${item.content ? `<p>${itemContent}</p>` : `<p class="empty-note">Empty Note</p>`}
                   </div>
               </div>
           `;
@@ -323,31 +331,35 @@ function trashNotes() {
         const reminderString = item.deleteDate;
         const parts = reminderString.split(/[\s,:]+/);
 
-      const month = parts[0];
-      const day = parseInt(parts[1], 10);
-      const year = parseInt(parts[2], 10);
-      const hour = parseInt(parts[3], 10);
-      const minute = parseInt(parts[4], 10);
-      const amPm = parts[5];
+        const month = parts[0];
+        const day = parseInt(parts[1], 10);
+        const year = parseInt(parts[2], 10);
+        const hour = parseInt(parts[3], 10);
+        const minute = parseInt(parts[4], 10);
+        const amPm = parts[5];
 
-      const monthIndex = new Date(Date.parse(month + " 1, 2000")).getMonth();
+        const monthIndex = new Date(Date.parse(month + " 1, 2000")).getMonth();
 
-      // Create a new Date object
-      const reminderDate = new Date(year, monthIndex, day, hour, minute);
+        // Create a new Date object
+        const reminderDate = new Date(year, monthIndex, day, hour, minute);
 
-      // Adjust for AM/PM
-      if (amPm === "PM" && hour < 12) {
-        reminderDate.setHours(reminderDate.getHours() + 12);
-      }
+        // Adjust for AM/PM
+        if (amPm === "PM" && hour < 12) {
+          reminderDate.setHours(reminderDate.getHours() + 12);
+        }
 
-      const currentDate = new Date();
-      const differenceInMilliseconds = Math.abs(reminderDate - currentDate);
+        const currentDate = new Date();
+        const differenceInMilliseconds = Math.abs(reminderDate - currentDate);
 
-      const millisecondsPerDay = 1000 * 60 * 60 * 24;
-      const millisecondsPerMonth = millisecondsPerDay * 30.44;
+        const millisecondsPerDay = 1000 * 60 * 60 * 24;
+        const millisecondsPerMonth = millisecondsPerDay * 30.44;
 
-      const daysDifference = Math.floor(differenceInMilliseconds / millisecondsPerDay);
-
+        const daysDifference = Math.floor(differenceInMilliseconds / millisecondsPerDay);
+        let itemContent ='';
+        for (let index = 0; index < 500; index++) {
+            itemContent += item.content.charAt(index);
+        }
+        itemContent += '...';
 
         htmlContent += `
               <div class="note-card" 
@@ -357,7 +369,7 @@ function trashNotes() {
               >
                   ${item.title ? `<div class="note-title">${item.title}</div>` : ''}
                   <div class="note-content">
-                      <p>${item.content ? item.content : "Empty Note"}</p>
+                      ${item.content ? `<p>${itemContent}</p>` : `<p class="empty-note">Empty Note</p>`}
                   </div>
                   <div class="days-left">
                     <p>${daysDifference} ${daysDifference == 1?"day":"days"} left</p>
@@ -434,6 +446,7 @@ function closeNoteModal(event){
       localStorage.setItem("note-data", JSON.stringify(newArray));
       modalContainer.remove();
       handleRoute()
+      removeIDnotif(noteID);
     }
 }
 function closeArchiveModal(event){
@@ -531,7 +544,7 @@ function deleteBtn(event, noteID) {
   const amOrPm = hours < 12 ? amPm[0] : amPm[1];
   
   const formattedDate = `${months[monthIndex]} ${day+7}, ${year}, ${hours % 12}:${minutes < 10 ? '0' : ''}${minutes} ${amOrPm}`;
-  console.log(formattedDate)
+ // console.log(formattedDate)
   getNoteData.forEach(data => {
     if (parseInt(data.id) === noteID) {
       data.delete = true;
@@ -585,17 +598,30 @@ function markAsDone(event, noteID){
   event.target.closest('.modal-container').remove();
   handleRoute()
 }
+let modalCount = 0;
+let zIndex = 1;
 function modalPrompt(message) {
-  promptSound();
-  const modalPromptM = document.querySelector(".modal-prompt");
-  const pTag = modalPromptM.querySelector("p");
-
-  pTag.textContent = message;
-  modalPromptM.classList.add("active");
-
+  promptSound()
+  zIndex++;
+  const modalCountCurrent = ++modalCount; 
+  const modalPromptM = `
+    <div class="modal-prompt" id="modal-prompt-${modalCountCurrent}">
+      <p>${message}</p>
+      <div class="button" onclick="closePromptModal(${modalCountCurrent})">&#10005</div>
+    </div>
+  `;
+  document.body.insertAdjacentHTML('beforeend', modalPromptM);
+  document.querySelector(`#modal-prompt-${modalCountCurrent}`).style.zIndex = zIndex;
   setTimeout(() => {
-    modalPromptM.classList.remove("active");
-  }, 5000); 
+    const modalPromptElement = document.querySelector(`#modal-prompt-${modalCountCurrent}`);
+    modalPromptElement.classList.add('active');
+
+    setTimeout(() => {
+      setTimeout(() => {
+        modalPromptElement.classList.remove('active');
+      }, 300);
+    }, 5000);
+  }, 100);
 }
 async function promptSound(){
   const sound = new Howl({
@@ -604,8 +630,14 @@ async function promptSound(){
 
   sound.play();
 }
-function closePromptModal(event){
-  event.target.closest(".modal-prompt").remove();
+function closePromptModal(modalId) {
+  const modalPromptElement = document.querySelector(`#modal-prompt-${modalId}`);
+  if (modalPromptElement) {
+    modalPromptElement.classList.remove('active');
+    setTimeout(() => {
+      modalPromptElement.remove();
+    }, 300);
+  }
 }
 
 function content() {
@@ -621,24 +653,18 @@ window.addEventListener("mousemove", function(event) {
     bodyElement.classList.remove("mouse-inside");
   }
 });
-window.addEventListener("click",  function(){
-  handleRoute()
-  setupEventListeners()
-});
-document.addEventListener("click",  function(){
-  handleRoute()
-  setupEventListeners()
-});
-
-
-// Function to display a push notification
 function showNotification(message) {
   if ('Notification' in window && Notification.permission === 'granted') {
     new Notification(message);
   }
 }
 
-const notifiedItems = new Set();
+function removeIDnotif(noteID) {
+  if (notifiedItems.has(noteID)) {
+    notifiedItems.delete(noteID);
+  }
+}
+
 
 setInterval(() => {
   if (content()) {
@@ -654,6 +680,7 @@ setInterval(() => {
           showNotification(`Item with a deadline right now: ${reminderString}`);
           showCardNotif(item.id, reminderString);
           notifiedItems.add(item.id);
+          console.log(notifiedItems)
         } else if (
           reminderDate.getTime() === currentDate.getTime() + 24 * 60 * 60 * 1000 &&
           !notifiedItems.has(item.id)
@@ -680,13 +707,13 @@ function showCardNotif(noteID, reminder) {
 
   const timeString = date.toLocaleTimeString('en-US', options);
 
-  const modalPromptM = document.querySelector(".modal-prompt-2");
+ 
+ const modalPromptM = document.querySelector(".modal-prompt-2");
   const pTag = modalPromptM.querySelector("p");
 
   const clickNoteButton = document.createElement("div");
   clickNoteButton.classList.add("button", "open");
   clickNoteButton.textContent = "Open-Note";
-
   clickNoteButton.onclick = function () {
     openReminderNote(event, noteID);
   };

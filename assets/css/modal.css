@@ -37,6 +37,7 @@
     padding: 20px 20px 10px 20px;
 }
 .modal-header{
+    flex: 1;
     width: auto;
     height: auto;
     display: flex;
@@ -92,12 +93,14 @@
     background-color:transparent;
 }
 .modal-body textarea {
+    flex: 1;
     width: 100%;
-    height: auto;
+    height:100%;
     resize: none;
     background-color: transparent;
     border: none;
     font-size: 1rem;
+    overflow: hidden;
 }
 .modal-container.add-note .modal-body textarea {
     width: 100%;
@@ -254,10 +257,11 @@ button .background li:hover,a .background li.active{
     margin-right: 20px;
     cursor: pointer;
 }
+
 .modal-prompt, .modal-prompt-2{
-    min-width: 300px;
-    width: auto;
-    height: 3rem;
+    min-width: 260px;
+    width: 300px;
+    height: 60px;
     position: fixed;
     bottom: 0;
     margin: 15px;

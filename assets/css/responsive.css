@@ -38,7 +38,13 @@
         justify-content: left;
         font-size: 23px;
         height: 60px;
-        font-family: cursive;
+        /* font-family: cursive; */
+    }
+    .logo-container-respo img{
+        height: 30px;
+        width: 30px;
+        border-radius: 50%;
+        margin-right: 10px;
     }
     aside .menu-list-container a{
         width: 100%;
@@ -78,5 +84,7 @@
     .note-card{
         width: 100%;
     }
-
+    .modal-prompt{
+        width:auto;
+    }
 }

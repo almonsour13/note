@@ -87,8 +87,13 @@ nav .logo-container{
     align-items: center;
     font-size: 20px;
 }
+.logo-container img{
+    height: 30px;
+    width: 30px;
+    margin-right: 5px;
+}
 nav .logo-container.home{
-    font-family: cursive;
+    /* font-family:; */
 }
 main{
     margin-top: 60px;

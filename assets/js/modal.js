@@ -74,7 +74,6 @@ function setupEventListeners(){
         body.appendChild(modalContainer);
     });
 }
-setupEventListeners()  
 window.addEventListener("hashchange", setupEventListeners);
 function pin(element){
   if(element.classList.contains("pin")){
@@ -395,6 +394,33 @@ function clickCardTrash(element) {
   const matchingItem = content().find(item => element.getAttribute("noteID") == item.id);
 
   if (matchingItem) {
+    const reminderString = matchingItem.deleteDate;
+        const parts = reminderString.split(/[\s,:]+/);
+
+        const month = parts[0];
+        const day = parseInt(parts[1], 10);
+        const year = parseInt(parts[2], 10);
+        const hour = parseInt(parts[3], 10);
+        const minute = parseInt(parts[4], 10);
+        const amPm = parts[5];
+
+        const monthIndex = new Date(Date.parse(month + " 1, 2000")).getMonth();
+
+        // Create a new Date object
+        const reminderDate = new Date(year, monthIndex, day, hour, minute);
+
+        // Adjust for AM/PM
+        if (amPm === "PM" && hour < 12) {
+          reminderDate.setHours(reminderDate.getHours() + 12);
+        }
+
+        const currentDate = new Date();
+        const differenceInMilliseconds = Math.abs(reminderDate - currentDate);
+
+        const millisecondsPerDay = 1000 * 60 * 60 * 24;
+        const millisecondsPerMonth = millisecondsPerDay * 30.44;
+
+        const daysDifference = Math.floor(differenceInMilliseconds / millisecondsPerDay);
 
     const noteID = matchingItem.id;
     const body = document.body;
@@ -408,7 +434,6 @@ function clickCardTrash(element) {
               <div class="modal-main">
                   <div class="modal-header">
                       <input type="text" placeholder="Title" value="${matchingItem.title}" disabled>
-                      <button class="pin-btn">
                   </div>
                   <!-- Modal Body with Textarea for Note -->
                   <div class="modal-body">
@@ -417,7 +442,7 @@ function clickCardTrash(element) {
                   </div>
                     <div class="note-reminder-container">
                        <div class="days-left">
-                         <p>asdasdasd</p>
+                          <p>${daysDifference} ${daysDifference == 1?"day":"days"} left</p>
                       </div>
                     </div>
               </div>
