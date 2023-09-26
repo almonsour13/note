@@ -84,7 +84,7 @@
     .note-card{
         width: 100%;
     }
-    .modal-prompt{
+    .modal-prompt, .modal-prompt-2{
         width:230px;
     }
 }

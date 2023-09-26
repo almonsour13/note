@@ -685,9 +685,17 @@ function showNotification(message) {
   }
 }
 function removeIDnotif(noteID) {
+  noteID = parseInt(noteID); 
   console.log(notifiedItems)
+  console.log(noteID)
+  if (Number.isInteger(noteID) && notifiedItems.has(noteID)) {
     notifiedItems.delete(noteID);
+    console.log(`Removed note ID ${noteID} from notifiedItems`);
+  } else {
+    console.log(`Note ID ${noteID} not found in notifiedItems`);
+  }
 }
+
 setInterval(() => {
   if (content()) {
     content().forEach(item => {
@@ -697,23 +705,24 @@ setInterval(() => {
         const currentDate = new Date();
         // Check if the absolute time difference is very small (e.g., within a few seconds)
         if (Math.abs(reminderDate - currentDate) < 5000 && !notifiedItems.has(item.id)) {
-          console.log(`Item with a deadline right now: ${reminderString}`);
-          showNotification(`Item with a deadline right now: ${reminderString}`);
           showCardNotif(item.id, reminderString);
+          console.log(`Item with a deadline right now: ${reminderString}`);
+          showNotification(`Note with a deadline right now: ${reminderString}`);
           notifiedItems.add(item.id);
-          handleRoute()
+          console.log(item.id)
           console.log(notifiedItems)
         } else if (
           reminderDate.getTime() === currentDate.getTime() + 24 * 60 * 60 * 1000 &&
           !notifiedItems.has(item.id)
         ) {
+          showCardNotif(item.id, reminderString);
           console.log(`Item with a deadline tomorrow at the same time: ${reminderString}`);
-          showNotification(`Item with a deadline tomorrow at the same time: ${reminderString}`);
-          handleRoute()
+          showNotification(`Note with a deadline tomorrow at the same time: ${reminderString}`);
           notifiedItems.add(item.id);
         }
       }
     });
+    handleRoute();
   }
 }, 1000);
 function showCardNotif(noteID, reminder) {
