@@ -1,6 +1,8 @@
 
 const notifiedItems = new Set();
 
+let modalCount = 0;
+let zIndex = 2;
 function isMobileDevice() {
   const mobileKeywords = /Android|webOS|iPhone|iPad|iPod|BlackBerry|Windows Phone|iOS/i;
   const userAgent = navigator.userAgent;
@@ -93,12 +95,11 @@ function handleRoute() {
   }
   document.querySelector('.menu-button').classList.remove("active")
   document.querySelector('aside').classList.remove("active")
-  setupEventListeners();
+  //setupEventListeners();
 }
 window.addEventListener('hashchange', function(){
   handleRoute()
   initializeAllMasonry()
-  setupEventListeners()
 });
 handleRoute();
 
@@ -197,7 +198,7 @@ function notes() {
             }
             
           ${!pinnedNotes && !unpinNotes?'<div class="no-notes">No note</>':''}
-          <div class="add-note-btn">
+          <div class="add-note-btn" onclick="addNoteBtn(this)">
             <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24">
               <path d="M440-240h80v-120h120v-80H520v-120h-80v120H320v80h120v120ZM240-80q-33 0-56.5-23.5T160-160v-640q0-33 23.5-56.5T240-880h320l240 240v480q0 33-23.5 56.5T720-80H240Zm280-520v-200H240v640h480v-440H520ZM240-800v200-200 640-640Z"/>
             </svg>
@@ -445,8 +446,8 @@ function closeNoteModal(event){
       modalPrompt("Note Updated")
       localStorage.setItem("note-data", JSON.stringify(newArray));
       modalContainer.remove();
-      handleRoute()
       removeIDnotif(noteID);
+      handleRoute()
     }
 }
 function closeArchiveModal(event){
@@ -524,6 +525,7 @@ function unArchive(event, noteID){
   localStorage.setItem('note-data', JSON.stringify(getNoteData));
   event.target.closest('.modal-container').remove();
   handleRoute()
+  setupEventListeners()
 }
 function deleteBtn(event, noteID) {
   var getNoteData = JSON.parse(localStorage.getItem('note-data'));
@@ -598,8 +600,6 @@ function markAsDone(event, noteID){
   event.target.closest('.modal-container').remove();
   handleRoute()
 }
-let modalCount = 0;
-let zIndex = 1;
 function modalPrompt(message) {
   promptSound()
   zIndex++;
@@ -658,14 +658,10 @@ function showNotification(message) {
     new Notification(message);
   }
 }
-
 function removeIDnotif(noteID) {
-  if (notifiedItems.has(noteID)) {
+  console.log(notifiedItems)
     notifiedItems.delete(noteID);
-  }
 }
-
-
 setInterval(() => {
   if (content()) {
     content().forEach(item => {
@@ -673,7 +669,6 @@ setInterval(() => {
         const reminderString = item.reminder;
         const reminderDate = new Date(reminderString);
         const currentDate = new Date();
-
         // Check if the absolute time difference is very small (e.g., within a few seconds)
         if (Math.abs(reminderDate - currentDate) < 5000 && !notifiedItems.has(item.id)) {
           console.log(`Item with a deadline right now: ${reminderString}`);
@@ -727,12 +722,12 @@ function showCardNotif(noteID, reminder) {
   setTimeout(() => {
     modalPromptM.classList.remove("active");
   }, 5000);
+  handleRoute()
 }
 async function notifSound(){
   const sound = new Howl({
     src: ['assets/sounds/mixkit-clear-announce-tones-2861.wav']
   });
-
   sound.play();
 }
 function openReminderNote(event, noteID) {

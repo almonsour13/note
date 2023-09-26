@@ -259,7 +259,6 @@ button .background li:hover,a .background li.active{
 }
 
 .modal-prompt, .modal-prompt-2{
-    min-width: 260px;
     width: 300px;
     height: 60px;
     position: fixed;

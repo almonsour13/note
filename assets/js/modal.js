@@ -1,8 +1,5 @@
 
-function setupEventListeners(){
-    const addNote = document.querySelector(".add-note-btn");
-  
-    addNote.addEventListener("click", function (event) {
+function addNoteBtn(element){
         const body = document.body;
   
         const modalContainer = document.createElement('div');
@@ -72,9 +69,8 @@ function setupEventListeners(){
             </div>
         `;
         body.appendChild(modalContainer);
-    });
 }
-window.addEventListener("hashchange", setupEventListeners);
+//window.addEventListener("hashchange", setupEventListeners);
 function pin(element){
   if(element.classList.contains("pin")){
     element.classList.remove("pin");
@@ -296,7 +292,7 @@ function clickCard(element) {
                         <span>${formattedReminder}</span>
                         </div>
                         <div class="days-left">
-                        ${currentDate < reminderDate?``:
+                        ${currentDate <= reminderDate?``:
                          `<p class="mark-as-done" onclick="markAsDone(event, ${noteID})">Mark as done</p>`
                         }
                       </div>
@@ -503,6 +499,5 @@ document.addEventListener('input', function (e) {
         autoResizeTextarea();
     }
 });
-autoResizeTextarea();
-window.addEventListener('click', setupEventListeners());
-window.addEventListener('haschange', setupEventListeners());
+//window.addEventListener('click', setupEventListeners());
+//window.addEventListener('haschange', setupEventListeners());
