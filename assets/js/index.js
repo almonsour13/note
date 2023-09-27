@@ -647,15 +647,17 @@ function modalPrompt(message) {
   setTimeout(() => {
     const modalPromptElement = document.querySelector(`#modal-prompt-${modalCountCurrent}`);
     modalPromptElement.classList.add('active');
-
+    var intervs = setInterval(() => {
+      handleRoute();
+    }, 1000);
     setTimeout(() => {
       setTimeout(() => {
         modalPromptElement.classList.remove('active');
         modalPromptElement.remove;
+        clearInterval(intervs)
       }, 300);
     }, 5000);
   }, 100);
-  intervals()
   initializeAllMasonry()
 }
 async function promptSound(){
@@ -754,23 +756,14 @@ function showCardNotif(noteID, reminder) {
   modalPromptM.innerHTML = clickNoteButton;
   
   modalPromptM.classList.add("active");
-
+  var intervs = setInterval(() => {
+    handleRoute();
+  }, 1000);
   setTimeout(() => {
     modalPromptM.classList.remove("active");
+    clearInterval(intervs)
   }, 5000);
-  intervals()
   initializeAllMasonry()
-}
-function intervals() {
-  var intervs = setInterval(() => {
-      handleRoute();
-    }, 1000);
-
-  // Move clearInterval outside the setTimeout block
-  setTimeout(() => {
-    console.log("Asd")
-    clearInterval(intervs);
-  }, 5000); // This cancels the interval after 15 seconds (5-second delay + 10 seconds of running)
 }
 async function notifSound(){
   const sound = new Howl({
