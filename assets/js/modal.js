@@ -292,9 +292,8 @@ function clickCard(element) {
                         <span>${formattedReminder}</span>
                         </div>
                         <div class="days-left">
-                        ${currentDate <= reminderDate?``:
-                         `<p class="mark-as-done" onclick="markAsDone(event, ${noteID})">Mark as done</p>`
-                        }
+                     <p class="mark-as-done" onclick="markAsDone(event, ${noteID})">Mark as done</p>
+                        
                       </div>
                     </div>`
                       :

@@ -647,14 +647,10 @@ function modalPrompt(message) {
   setTimeout(() => {
     const modalPromptElement = document.querySelector(`#modal-prompt-${modalCountCurrent}`);
     modalPromptElement.classList.add('active');
-    var intervs = setInterval(() => {
-      handleRoute();
-    }, 1000);
     setTimeout(() => {
       setTimeout(() => {
         modalPromptElement.classList.remove('active');
         modalPromptElement.remove;
-        clearInterval(intervs)
       }, 300);
     }, 5000);
   }, 100);
@@ -706,7 +702,18 @@ function removeIDnotif(noteID) {
     console.log(`Note ID ${noteID} not found in notifiedItems`);
   }
 }
-
+function intervals(){
+  var i = 0;
+  var intervs = setInterval(() => {
+    //handleRoute(); 
+    console.log(i++)
+  }, 2000);
+  setTimeout(() => {
+      handleRoute()
+      i=0;
+      console.log("hshs")
+  }, 5000);
+}
 setInterval(() => {
   if (content()) {
     content().forEach(item => {
@@ -756,13 +763,13 @@ function showCardNotif(noteID, reminder) {
   modalPromptM.innerHTML = clickNoteButton;
   
   modalPromptM.classList.add("active");
-  var intervs = setInterval(() => {
-    handleRoute();
-  }, 1000);
   setTimeout(() => {
-    modalPromptM.classList.remove("active");
-    clearInterval(intervs)
+    setTimeout(() => {
+      modalPromptM.classList.remove('active');
+      modalPromptM.remove;
+    }, 300);
   }, 5000);
+  intervals()
   initializeAllMasonry()
 }
 async function notifSound(){
@@ -772,10 +779,12 @@ async function notifSound(){
   sound.play();
 }
 function openReminderNote(event, noteID) {
-  window.location.href = 'index.html#/reminder';
+  handleRoute()
+    window.location.href = 'index.html#/reminder';
   setTimeout(() => {
       clickCard(noteID);
   }, 1000);
+  handleRoute()
   event.target.closest(".modal-prompt-2").remove();
 }
 
