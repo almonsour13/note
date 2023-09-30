@@ -708,6 +708,7 @@ function removeIDnotif(noteID) {
 function intervals(){
   setTimeout(() => {
       handleRoute()
+      initializeAllMasonry()
       console.log("hshs")
   }, 5000);
 }
