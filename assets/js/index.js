@@ -693,7 +693,6 @@ function showNotification(message) {
 }
 function removeIDnotif(noteID) {
   noteID = parseInt(noteID); 
-  console.log(notifiedItems)
   console.log(noteID)
   if (Number.isInteger(noteID) && notifiedItems.has(noteID)) {
     notifiedItems.delete(noteID);
@@ -703,14 +702,8 @@ function removeIDnotif(noteID) {
   }
 }
 function intervals(){
-  var i = 0;
-  var intervs = setInterval(() => {
-    //handleRoute(); 
-    console.log(i++)
-  }, 2000);
   setTimeout(() => {
       handleRoute()
-      i=0;
       console.log("hshs")
   }, 5000);
 }
