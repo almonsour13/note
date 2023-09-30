@@ -83,7 +83,7 @@
     margin-right: 5px;
     fill: red;
 }
-.note-reminder span{
+.note-reminder span,.note-reminder-container p{
     font-size: 12px;
 }
 .note-reminder.active span{
