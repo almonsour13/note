@@ -247,7 +247,7 @@ button .background li.backgroundImage{
     background-size: 100px;
     background-position: center;
 }
-button .background li:hover,a .background li.active{
+button .background li:hover,button .background li.active{
     border: 2px black solid;
 }
 .footer-btn button.active .background{

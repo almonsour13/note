@@ -448,16 +448,25 @@ function closeNoteModal(event){
     
       if(background.getAttribute("path")){
         imagePath = background.getAttribute("path");
-      }else if(background.getAttribute("color")){
+      }else
+      if(background.getAttribute("color")){
         colorValue = background.getAttribute("color");
+      }else{
+        if(background.getAttribute("defBG")){
+          imagePath=background.getAttribute("defBG");
+        }
+        if(background.getAttribute("defCL")){
+          colorValue=background.getAttribute("defCL");
+        }
       }
+
       const noteID = document.querySelector(".modal-content").getAttribute("noteID");
       const notesArray = {
         id: parseInt(noteID),
         title: titleInput.value,
         content: contentTextarea.value,
-        color: !imagePath?(colorValue?colorValue:"white"):"",
-        backgroundImage: imagePath,
+        color:colorValue?colorValue:'',
+        backgroundImage: imagePath?imagePath:'',
         archive: false,
         delete: false,
         reminder: convertDateTime()?convertDateTime():"",
@@ -672,7 +681,6 @@ function closePromptModal(modalId) {
     }, 300);
   }
 }
-
 function content() {
   var getNoteData = JSON.parse(localStorage.getItem('note-data'));
 
@@ -693,12 +701,8 @@ function showNotification(message) {
 }
 function removeIDnotif(noteID) {
   noteID = parseInt(noteID); 
-  console.log(noteID)
   if (Number.isInteger(noteID) && notifiedItems.has(noteID)) {
     notifiedItems.delete(noteID);
-    console.log(`Removed note ID ${noteID} from notifiedItems`);
-  } else {
-    console.log(`Note ID ${noteID} not found in notifiedItems`);
   }
 }
 function intervals(){

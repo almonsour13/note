@@ -113,33 +113,35 @@ function backgroundColor(element){
     element.classList.toggle('active');
 }
 function selectBackground(element) {
-  
-    const items = document.querySelectorAll('.color, .backgroundImage');
-    
-    items.forEach(item => {
-      if (item.classList.contains('active')) {
-        item.classList.remove('active');
-        console.log(item.classList);
-      }
-    });
-    element.classList.add('active');
-  
-    const computedStyle = window.getComputedStyle(element);
-    const backgroundColor = computedStyle.getPropertyValue('background-color');
-    const backgroundImage = computedStyle.getPropertyValue('background-image');
-    const background = document.querySelector(".modal-content");
-    background.style.backgroundColor = '';
-    background.style.backgroundImage = '';
-    background.style.background = 'none';
-  
-    if (element.classList.contains('color')) {
-      background.style.backgroundColor = backgroundColor;
-      background.setAttribute("color", element.getAttribute("color"));
-    } else if (element.classList.contains('backgroundImage')) {
-      background.style.backgroundImage = backgroundImage;
-      background.setAttribute("path", element.getAttribute("path"));
+  const items = document.querySelectorAll('.color, .backgroundImage');
+
+  items.forEach(item => {
+    if (item.classList.contains('active')) {
+      item.classList.remove('active');
     }
+
+  });
+  element.classList.add('active');
+
+  const computedStyle = window.getComputedStyle(element);
+  const backgroundColor = computedStyle.getPropertyValue('background-color');
+  const backgroundImage = computedStyle.getPropertyValue('background-image');
+  const background = document.querySelector(".modal-content");
+  background.style.backgroundColor = '';
+  background.style.backgroundImage = '';
+  background.style.background = 'none';
+
+  if (element.classList.contains('color')) {
+    background.style.backgroundColor = backgroundColor;
+    background.setAttribute("color", element.getAttribute("color"));
+    background.removeAttribute('path'); 
+  } else if (element.classList.contains('backgroundImage')) {
+    background.style.backgroundImage = backgroundImage;
+    background.setAttribute("path", element.getAttribute("path"));
+    background.removeAttribute('color');
+  }
 }
+
 function addNote() {
   const titleInput = document.querySelector(".modal-header input");
   const contentTextarea = document.querySelector(".modal-body textarea");
@@ -222,6 +224,7 @@ function convertDateTime() {
     return null;
   }
 } 
+
 function clickCard(element) {
   
   var noteID = 0;
@@ -266,9 +269,12 @@ function clickCard(element) {
     const modalContainer = document.createElement('div');
     modalContainer.classList.add('modal-container');
     modalContainer.innerHTML = `
-          <div class="modal-content" noteID="${noteID}" 
-             ${matchingItem.backgroundImage ? `path="${matchingItem.backgroundImage}"` : `color="${matchingItem.color}"`}
-              style="${matchingItem.backgroundImage ? `background-image: url('${matchingItem.backgroundImage}');` : `background-color: ${matchingItem.color};`}">
+          <div class="modal-content" noteID="${noteID}"
+              ${matchingItem.backgroundImage?`defBG = "${matchingItem.backgroundImage}"`:''}
+              ${matchingItem.color?`defCL = "${matchingItem.color}"`:''}
+              style="${matchingItem.backgroundImage ? `background-image: url('${matchingItem.backgroundImage}');` : ``}
+                     ${matchingItem.color?`background-color: ${matchingItem.color};`:``}"
+              >
               <!-- Modal Header with Title and Pin Button -->
               <div class="modal-main">
                   <div class="modal-header">
@@ -292,8 +298,9 @@ function clickCard(element) {
                         <span>${formattedReminder}</span>
                         </div>
                         <div class="days-left">
-                     <p class="mark-as-done" onclick="markAsDone(event, ${noteID})">Mark as done</p>
-                        
+                        ${currentDate <= reminderDate?``:
+                         `<p class="mark-as-done" onclick="markAsDone(event, ${noteID})">Mark as done</p>`
+                        }
                       </div>
                     </div>`
                       :
